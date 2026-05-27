@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Book Now Flight | Disclaimer - Legal Information</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #053881;
+    --navy-dark: #021f4a;
+    --sky: #0ea5e9;
+    --gold: #f59e0b;
+    --gold-light: #fcd34d;
+    --white: #ffffff;
+    --off-white: #f8fafc;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; color: var(--text); background: var(--off-white); overflow-x: hidden; }
+
+  /* ── NAV (identical to homepage) ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%; height: 70px;
+    background: rgba(5,56,129,0.95);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+    animation: slideDown .6s ease;
+  }
+  @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; font-weight: 900;
+    color: var(--white);
+    letter-spacing: -0.3px;
+    white-space: nowrap;
+  }
+  @media (max-width: 550px) {
+    .nav-logo { font-size: 1.2rem; }
+  }
+  .nav-logo span { color: var(--gold); }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: rgba(255,255,255,0.85); text-decoration: none; font-size: .9rem; font-weight: 500; transition: color .2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+
+  .nav-cta {
+    background: var(--gold); color: var(--navy-dark);
+    border: none; padding: .55rem 1.4rem; border-radius: 50px;
+    font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: .9rem;
+    cursor: pointer; transition: all .2s;
+  }
+  .nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); box-shadow: 0 4px 15px rgba(245,158,11,.4); }
+
+  /* ── HAMBURGER & MOBILE MENU ── */
+  .hamburger {
+    display: none; flex-direction: column; justify-content: center; gap: 5px;
+    width: 40px; height: 40px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+    border-radius: 10px; cursor: pointer; padding: 8px;
+    transition: background .2s;
+  }
+  .hamburger:hover { background: rgba(255,255,255,.18); }
+  .hamburger span {
+    display: block; height: 2px; background: var(--white); border-radius: 2px;
+    transition: all .3s ease; transform-origin: center;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .menu-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45);
+    z-index: 199; backdrop-filter: blur(2px);
+  }
+  .menu-overlay.visible { display: block; }
+
+  .mobile-menu {
+    position: fixed; top: 0; right: -300px; width: 280px; height: 100vh;
+    background: var(--navy-dark); z-index: 200;
+    display: flex; flex-direction: column;
+    padding: 90px 0 2rem;
+    transition: right .35s cubic-bezier(.4,0,.2,1);
+    box-shadow: -8px 0 40px rgba(0,0,0,.3);
+  }
+  .mobile-menu.open { right: 0; }
+
+  .mobile-links { list-style: none; flex: 1; }
+  .mobile-links li { border-bottom: 1px solid rgba(255,255,255,.06); }
+  .mobile-links a {
+    display: block; padding: 1rem 1.8rem;
+    color: rgba(255,255,255,.85); text-decoration: none;
+    font-size: 1rem; font-weight: 500; letter-spacing: .01em;
+    transition: all .2s;
+  }
+  .mobile-links a:hover { color: var(--gold); background: rgba(255,255,255,.05); padding-left: 2.2rem; }
+
+  .mobile-cta {
+    margin: 1.5rem 1.8rem 0;
+    background: var(--gold); color: var(--navy-dark);
+    border: none; padding: .85rem; border-radius: 50px;
+    font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 1rem;
+    cursor: pointer; transition: all .2s;
+  }
+  .mobile-cta:hover { background: var(--gold-light); }
+
+  /* ── PAGE HEADER (disclaimer) ── */
+  .page-header {
+    padding: 140px 5% 70px;
+    background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 50%, #0c4a9e 100%);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-header::before {
+    content: ''; position: absolute;
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(14,165,233,.15) 0%, transparent 70%);
+    top: -200px; right: -150px;
+    animation: float 12s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20px) scale(1.03); } }
+  .page-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900; color: var(--white); margin-bottom: 1rem;
+    position: relative; z-index: 2;
+  }
+  .page-header p {
+    color: rgba(255,255,255,.8); font-size: 1.1rem; max-width: 700px; margin: 0 auto;
+    position: relative; z-index: 2;
+  }
+
+  /* ── MAIN CONTENT (disclaimer text) ── */
+  .disclaimer-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 70px 5%;
+  }
+
+  .disclaimer-card {
+    background: white;
+    border-radius: 28px;
+    padding: 45px 50px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.05);
+    border: 1px solid var(--border);
+  }
+
+  .disclaimer-section {
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #eef2ff;
+  }
+  .disclaimer-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .disclaimer-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: var(--navy);
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .disclaimer-section h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 1.5rem 0 0.8rem 0;
+  }
+
+  .disclaimer-section p {
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    font-size: 0.98rem;
+  }
+
+  .disclaimer-section ul {
+    margin: 1rem 0 1rem 2rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+  .disclaimer-section li {
+    margin-bottom: 0.5rem;
+  }
+
+  .highlight-box {
+    background: #f0f7ff;
+    border-left: 4px solid var(--gold);
+    padding: 20px 25px;
+    border-radius: 16px;
+    margin: 25px 0;
+  }
+  .highlight-box p {
+    margin-bottom: 0;
+    font-weight: 500;
+    color: var(--navy);
+  }
+
+  .contact-ref {
+    background: var(--off-white);
+    border-radius: 20px;
+    padding: 20px 25px;
+    margin-top: 30px;
+    text-align: center;
+  }
+  .contact-ref a {
+    color: var(--navy);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .contact-ref a:hover {
+    color: var(--gold);
+  }
+
+  @media (max-width: 768px) {
+    .disclaimer-card {
+      padding: 30px 20px;
+    }
+    .disclaimer-section h2 {
+      font-size: 1.3rem;
+    }
+  }
+
+  /* ── FOOTER (identical to homepage) ── */
+  footer {
+    background: var(--navy-dark); color: rgba(255,255,255,.65);
+    padding: 60px 5% 30px;
+  }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+  .footer-brand .nav-logo { font-size: 1.4rem; display: block; margin-bottom: .75rem; white-space: normal; }
+  .footer-brand p { font-size: .88rem; line-height: 1.7; color: rgba(255,255,255,.5); max-width: 280px; }
+  .footer-col h4 { color: var(--white); font-size: .9rem; font-weight: 600; margin-bottom: 1rem; }
+  .footer-col ul { list-style: none; }
+  .footer-col li { margin-bottom: .5rem; }
+  .footer-col a { color: rgba(255,255,255,.5); text-decoration: none; font-size: .85rem; transition: color .2s; }
+  .footer-col a:hover { color: var(--gold); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,.08); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; font-size: .8rem; flex-wrap: wrap; gap: 12px; }
+
+  /* legal disclosure (same as home) */
+  .legal-disclosure {
+    background: #053881;
+    padding: 28px 5%;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .legal-container {
+    max-width: 1250px;
+    margin: 0 auto;
+  }
+  .legal-disclosure h3 {
+    color: var(--white);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .legal-disclosure .copyright {
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 22px;
+    font-size: 0.8rem;
+  }
+  .legal-block {
+    color: rgba(255,255,255,0.72);
+    font-size: 0.82rem;
+    line-height: 1.9;
+    margin-bottom: 20px;
+  }
+  .legal-block span {
+    color: #00c2ff;
+    font-weight: 700;
+  }
+  .legal-contact {
+    margin-top: 22px;
+    color: rgba(255,255,255,0.8);
+    font-size: 0.85rem;
+  }
+  .legal-contact a {
+    color: #00c2ff;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .legal-contact a:hover {
+    color: var(--gold-light);
+  }
+
+  @media (max-width: 900px) {
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .nav-links { display: none; }
+    .desktop-only { display: none; }
+    .hamburger { display: flex; }
+  }
+  @media (max-width: 600px) {
+    .footer-top { grid-template-columns: 1fr; }
+    .page-header { padding: 120px 5% 60px; }
+  }
+</style>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F0YMPGEH83"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-F0YMPGEH83');
+</script>
+
+</head>
+<body>
+
+  <!-- FLOATING CALL BUTTON (unchanged) -->
+<a href="tel:+18444495490" id="floatingCallBtn" style="
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #1a1f3c;
+  border-radius: 50px;
+  padding: 13px 24px 13px 14px;
+  text-decoration: none;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+  white-space: nowrap;
+">
+  <span style="
+    width: 42px; height: 42px; border-radius: 50%;
+    background: #3b82f6;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  ">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012.18 0h3a2 2 0 012 1.72c.13 1 .36 1.98.71 2.9a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.18 6.18l1.18-1.18a2 2 0 012.11-.45c.92.35 1.9.58 2.9.71A2 2 0 0122 16.92z"/>
+    </svg>
+  </span>
+  <span style="width: 1px; height: 28px; background: rgba(255,255,255,0.18); flex-shrink:0;"></span>
+  <span>
+    <span style="display:block; font-family:'DM Sans',sans-serif; font-size:17px; font-weight:600; color:#3b82f6; letter-spacing:0.01em;">+1 (844) 449-5490</span>
+    <span style="display:block; font-family:'DM Sans',sans-serif; font-size:12px; color:rgba(255,255,255,0.55); margin-top:1px;">Book online or call us</span>
+  </span>
+</a>
+
+<script>
+  (function() {
+    var btn = document.getElementById('floatingCallBtn');
+    btn.addEventListener('mouseenter', function() {
+      btn.style.transform = 'translateX(-50%) translateY(-2px)';
+      btn.style.boxShadow = '0 8px 32px rgba(0,0,0,0.4)';
+    });
+    btn.addEventListener('mouseleave', function() {
+      btn.style.transform = 'translateX(-50%) translateY(0)';
+      btn.style.boxShadow = '0 4px 24px rgba(0,0,0,0.35)';
+    });
+  })();
+</script>
+
+<!-- NAV (updated brand) -->
+<nav>
+  <div class="nav-logo">Book Now <span>Flight</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="disclaimer.html" class="active">Disclaimer</a></li>
+    <li><a href="privacy-policy.html">Privacy Policy</a></li>
+    <li><a href="contact.html">Contact Us</a></li>
+  </ul>
+  <button class="nav-cta desktop-only" onclick="window.location.href='tel:+18444495490'">Call +1 (844) 449-5490</button>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <ul class="mobile-links">
+    <li><a href="index.html" onclick="closeMenu()">Home</a></li>
+    <li><a href="about.html" onclick="closeMenu()">About us</a></li>
+    <li><a href="disclaimer.html" onclick="closeMenu()">Disclaimer</a></li>
+    <li><a href="privacy-policy.html" onclick="closeMenu()">Privacy Policy</a></li>
+    <li><a href="contact.html" onclick="closeMenu()">Contact Us</a></li>
+  </ul>
+  <button class="mobile-cta" onclick="window.location.href='tel:+18444495490'">Call +1 (844) 449-5490</button>
+</div>
+<div class="menu-overlay" id="menu-overlay" onclick="closeMenu()"></div>
+
+<!-- PAGE HEADER -->
+<section class="page-header">
+  <h1>Disclaimer</h1>
+  <p>Important legal information about our services, affiliate relationships, and user obligations.</p>
+</section>
+
+<!-- MAIN DISCLAIMER CONTENT (updated brand references) -->
+<div class="disclaimer-main">
+  <div class="disclaimer-card">
+
+    <div class="disclaimer-section">
+      <h2>📋 General Information</h2>
+      <p>The information provided by Book Now Flight LLC ("we," "us," or "our") on this website is for general informational and booking assistance purposes only. All information on the site is provided in good faith, however we make no representation or warranty of any kind, express or implied, regarding the accuracy, adequacy, validity, reliability, availability, or completeness of any information on the site.</p>
+      <p>Book Now Flight operates as an independent travel assistance platform. We are not a direct airline, hotel, or tour operator. Any booking made through our referral links or via our support team will be subject to the terms and conditions of the respective third-party service provider (airline, hotel, or travel aggregator).</p>
+    </div>
+
+    <div class="disclaimer-section">
+      <h2>🔗 Affiliate & Third-Party Links</h2>
+      <p>Our website participates in various affiliate marketing programs, which means we may earn commissions when users click on or make bookings through certain links on our site. These commissions come at no additional cost to you. We are compensated for referring traffic and business to partner companies such as airlines, booking platforms, and travel service providers.</p>
+      <div class="highlight-box">
+        <p>⚠️ <strong>Important:</strong> Book Now Flight does not control the content or policies of third-party websites. We are not responsible for any changes in flight schedules, cancellations, baggage policies, or pricing set by airlines or booking partners. Always verify final details directly with the airline before travel.</p>
+      </div>
+      <p>We strive to display accurate flight and fare information, but actual prices and availability may change without notice. The final booking confirmation and payment are handled by the third-party provider. Book Now Flight does not store payment information or process transactions directly.</p>
+    </div>
+
+    <div class="disclaimer-section">
+      <h2>📞 Call Consent & Service Fees</h2>
+      <p>By calling the support numbers displayed on this website (including but not limited to <strong>+1 (844) 449-5490</strong>), you agree that you may be connected with a licensed travel specialist or an independent service representative. Calls may be monitored or recorded for quality assurance and training purposes.</p>
+      <p><strong>Service fees:</strong> In addition to any airline charges, our travel specialists may charge a service fee for booking assistance, changes, cancellations, or other travel support services. Any applicable fees will be disclosed during the call before processing your request. Standard carrier charges from your telephone provider may also apply.</p>
+      <p>We are an independent travel agency and not directly affiliated with any government entity or official airline consumer protection group. Our support team is available 24/7 to assist with new reservations, modifications, and cancellations in compliance with airline policies.</p>
+    </div>
+
+    <div class="disclaimer-section">
+      <h2>✈️ Travel & Booking Risks</h2>
+      <h3>Flight Changes & Cancellations</h3>
+      <p>Flight schedules, routes, and prices are subject to change by the operating airline. Book Now Flight does not guarantee the availability of specific flights or fares at the time of booking. Any cancellation or change fees are determined solely by the airline's policy. We recommend purchasing travel insurance to protect against unforeseen disruptions.</p>
+      <h3>Passport & Visa Requirements</h3>
+      <p>It is the sole responsibility of the traveler to ensure they possess valid passports, visas, and any other required travel documents for their destination. Book Now Flight is not liable for denied boarding or entry due to incomplete or incorrect documentation.</p>
+      <h3>Health & Safety</h3>
+      <p>Travelers should check for any health advisories, vaccination requirements, or COVID-19 related restrictions imposed by the destination country. Book Now Flight does not provide medical or legal advice, and we strongly recommend checking official government sources before travel.</p>
+    </div>
+
+    <div class="disclaimer-section">
+      <h2>⚖️ Limitation of Liability</h2>
+      <p>To the fullest extent permitted by applicable law, Book Now Flight LLC, its directors, employees, partners, and affiliates shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from (i) your use or inability to use the website; (ii) any conduct or content of any third party on the site; (iii) any content obtained from the site; and (iv) unauthorized access, use or alteration of your transmissions or content.</p>
+      <p>We do not warrant that the website will be uninterrupted, secure, or error-free, that defects will be corrected, or that the server is free of viruses or other harmful components.</p>
+    </div>
+
+    <div class="disclaimer-section">
+      <h2>📄 External Links Disclaimer</h2>
+      <p>Our website may contain links to external websites that are not provided or maintained by or in any way affiliated with Book Now Flight. Please note that we do not guarantee the accuracy, relevance, timeliness, or completeness of any information on these external websites. We encourage users to read the privacy policies and terms of use of any third-party sites they visit.</p>
+    </div>
+
+    <div class="disclaimer-section">
+      <h2>🔄 Updates & Changes</h2>
+      <p>We reserve the right to modify or replace this Disclaimer at any time without prior notice. Any changes will be effective immediately upon posting on this page. Your continued use of the website after any such changes constitutes your acceptance of the new Disclaimer. It is your responsibility to review this page periodically for updates.</p>
+      <div class="contact-ref">
+        <strong>For any questions regarding this Disclaimer, please contact us:</strong><br />
+        📞 <a href="tel:+18444495490">+1 (844) 449-5490</a><br />
+        ✉️ <a href="mailto:contact@booknowflight.com">contact@booknowflight.com</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER (updated brand) -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="nav-logo">Book Now <span>Flight</span></span>
+      <p>Travel tickets with ease. Search, compare, and book flights worldwide with dedicated 24/7 support. Operated by Book Now Flight.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Flight Search</a></li>
+        <li><a href="#">Cheap Flights</a></li>
+        <li><a href="#">International Flights</a></li>
+        <li><a href="#">Domestic Flights</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#">Help Center</a></li>
+        <li><a href="#">Manage Booking</a></li>
+        <li><a href="#">Refund Policy</a></li>
+        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Book Now Flight. All rights reserved.</span>
+    <span>✈ Travel Tickets With Ease</span>
+  </div>
+</footer>
+
+<!-- LEGAL DISCLOSURE (updated brand references) -->
+<section class="legal-disclosure">
+  <div class="legal-container">
+    <h3>This site is Managed by Book Now Flight LLC</h3>
+    <p class="copyright">Copyright © 2026 All Rights Reserved</p>
+    <div class="legal-block">
+      <span>Affiliate Disclosure:</span>
+      Our website participates in various affiliate and partner programs, which means we may earn commissions when users book flights or services through our links. Book Now Flight is an independent travel platform and is not directly affiliated with or endorsed by any airline, hotel, or travel brand mentioned on this website. All trademarks, logos, and brand names belong to their respective owners and are used for informational purposes only.
+    </div>
+    <div class="legal-block">
+      <span>Call Consent:</span>
+      By calling the support numbers listed on this website, you consent to receive assistance and information related to travel bookings, modifications, cancellations, and promotional offers. Calls may be monitored or recorded for quality and training purposes. Standard carrier charges may apply depending on your telecom provider.
+    </div>
+    <div class="legal-block">
+      <span>Travel Services Disclaimer:</span>
+      Book Now Flight acts as an independent travel assistance provider. We help customers compare travel options and connect with airlines or service providers when required. Additional airline policies, fare rules, cancellation fees, and service charges may apply depending on the booking.
+    </div>
+    <div class="legal-contact">
+      Customer Support:
+      <a href="tel:+18444495490">+1 (844) 449-5490</a>
+      |
+      Email:
+      <a href="mailto:contact@booknowflight.com">contact@booknowflight.com</a>
+    </div>
+  </div>
+</section>
+
+<script>
+  // ── HAMBURGER MENU (same as home) ──
+  function toggleMenu() {
+    const menu = document.getElementById('mobile-menu');
+    const overlay = document.getElementById('menu-overlay');
+    const btn = document.getElementById('hamburger');
+    const isOpen = menu.classList.toggle('open');
+    overlay.classList.toggle('visible', isOpen);
+    btn.classList.toggle('open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  }
+
+  function closeMenu() {
+    document.getElementById('mobile-menu').classList.remove('open');
+    document.getElementById('menu-overlay').classList.remove('visible');
+    document.getElementById('hamburger').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+</script>
+
+</body>
+</html>

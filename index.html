@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Book Now Flight | Travel Tickets With Ease</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #053881;
+    --navy-dark: #021f4a;
+    --sky: #0ea5e9;
+    --gold: #f59e0b;
+    --gold-light: #fcd34d;
+    --white: #ffffff;
+    --off-white: #f8fafc;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --card-bg: rgba(255,255,255,0.95);
+  }
+
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; color: var(--text); background: var(--off-white); overflow-x: hidden; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%; height: 70px;
+    background: rgba(5,56,129,0.95);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+    animation: slideDown .6s ease;
+  }
+  @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; font-weight: 900;
+    color: var(--white);
+    letter-spacing: -0.3px;
+    white-space: nowrap;
+  }
+  .nav-logo span { color: var(--gold); }
+  
+  /* responsive brand text */
+  @media (max-width: 550px) {
+    .nav-logo { font-size: 1.2rem; }
+  }
+  @media (max-width: 420px) {
+    .nav-logo { font-size: 1rem; letter-spacing: -0.2px; }
+  }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: rgba(255,255,255,0.85); text-decoration: none; font-size: .9rem; font-weight: 500; transition: color .2s; }
+  .nav-links a:hover { color: var(--gold); }
+
+  .nav-cta {
+    background: var(--gold); color: var(--navy-dark);
+    border: none; padding: .55rem 1.4rem; border-radius: 50px;
+    font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: .9rem;
+    cursor: pointer; transition: all .2s;
+  }
+  .nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); box-shadow: 0 4px 15px rgba(245,158,11,.4); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 50%, #0c4a9e 100%);
+    display: flex; align-items: center;
+    padding: 90px 5% 60px;
+    position: relative; overflow: hidden;
+  }
+
+  .hero::before {
+    content: ''; position: absolute;
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(14,165,233,.18) 0%, transparent 70%);
+    top: -150px; right: -100px;
+    animation: float 8s ease-in-out infinite;
+  }
+  .hero::after {
+    content: ''; position: absolute;
+    width: 400px; height: 400px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(245,158,11,.12) 0%, transparent 70%);
+    bottom: -100px; left: 10%;
+    animation: float 10s ease-in-out infinite reverse;
+  }
+  @keyframes float { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-30px) scale(1.05); } }
+
+  .hero-grid {
+    position: absolute; inset: 0; opacity: .05;
+    background-image: radial-gradient(circle, white 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .hero-content { position: relative; z-index: 2; max-width: 700px; animation: fadeUp .8s .2s both ease; }
+  @keyframes fadeUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: rgba(245,158,11,.15); border: 1px solid rgba(245,158,11,.35);
+    color: var(--gold-light); font-size: .8rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+    padding: .4rem 1rem; border-radius: 50px; margin-bottom: 1.5rem;
+  }
+  .hero-badge::before { content: '✈'; font-size: 1rem; }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900; line-height: 1.1; color: var(--white); margin-bottom: 1rem;
+  }
+  .hero h1 em { color: var(--gold); font-style: normal; }
+
+  .hero p { color: rgba(255,255,255,.75); font-size: 1.1rem; line-height: 1.7; max-width: 520px; margin-bottom: 2.5rem; }
+
+  .hero-stats { display: flex; gap: 2.5rem; margin-top: 2rem; }
+  .stat { }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--white); }
+  .stat-num span { color: var(--gold); }
+  .stat-label { font-size: .8rem; color: rgba(255,255,255,.55); letter-spacing: .04em; text-transform: uppercase; }
+
+  /* ── SEARCH BOX ── */
+  .search-wrapper {
+    position: relative; z-index: 10;
+    max-width: 950px; margin: 0 auto;
+    padding: 0 5%;
+    margin-top: -60px;
+    animation: fadeUp .8s .5s both ease;
+  }
+
+  .search-box {
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(5,56,129,.2);
+    overflow: visible;
+  }
+
+  .trip-tabs {
+    display: flex; background: var(--off-white); border-bottom: 1px solid var(--border);
+    padding: 0 1.5rem;
+  }
+  .trip-tab {
+    padding: 1rem 1.5rem; border: none; background: transparent;
+    font-family: 'DM Sans', sans-serif; font-size: .9rem; font-weight: 500;
+    color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent;
+    transition: all .2s; margin-bottom: -1px;
+  }
+  .trip-tab.active { color: var(--navy); border-bottom-color: var(--navy); }
+  .trip-tab:hover { color: var(--navy); }
+
+  .search-fields {
+    display: grid; grid-template-columns: 1fr 1fr 1fr 1fr auto;
+    gap: 0; align-items: stretch;
+  }
+
+  .field {
+    padding: 1.2rem 1.5rem;
+    border-right: 1px solid var(--border);
+    cursor: pointer; transition: background .2s;
+  }
+  .field:last-of-type { border-right: none; }
+  .field:hover { background: #f0f7ff; }
+  .field-label { font-size: .72rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: .3rem; }
+  .field-value { font-size: 1rem; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .field-sub { font-size: .8rem; color: var(--muted); margin-top: .15rem; }
+
+  .field input, .field select {
+    border: none; outline: none; background: transparent;
+    font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 600;
+    color: var(--text); width: 100%; cursor: pointer;
+  }
+  .field select { appearance: none; }
+
+  .search-btn {
+    background: var(--navy); color: var(--white);
+    border: none; padding: 0 2rem;
+    font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 600;
+    cursor: pointer; display: flex; align-items: center; gap: .6rem;
+    transition: all .2s; min-width: 140px; justify-content: center;
+    border-bottom-right-radius: 19px;
+  }
+
+.search-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: #94a3b8;
+}
+
+  .search-btn:hover { background: var(--sky); }
+  .search-btn svg { width: 18px; height: 18px; }
+
+  /* ── FEATURES ── */
+  .features {
+    padding: 80px 5%;
+    background: var(--off-white);
+  }
+
+  .section-label {
+    text-align: center; font-size: .8rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--sky); margin-bottom: .75rem;
+  }
+  .section-title {
+    text-align: center; font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 700; color: var(--text);
+    margin-bottom: 3.5rem; max-width: 600px; margin-left: auto; margin-right: auto;
+  }
+
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
+
+  .feature-card {
+    background: var(--white); border-radius: 16px; padding: 2rem;
+    border: 1px solid var(--border);
+    transition: all .3s; position: relative; overflow: hidden;
+  }
+  .feature-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--navy), var(--sky));
+    transform: scaleX(0); transition: transform .3s; transform-origin: left;
+  }
+  .feature-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(5,56,129,.12); }
+  .feature-card:hover::before { transform: scaleX(1); }
+
+  .feature-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; margin-bottom: 1.25rem;
+  }
+  .feature-card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: .5rem; }
+  .feature-card p { font-size: .88rem; color: var(--muted); line-height: 1.6; }
+
+  /* ── DESTINATIONS ── */
+  .destinations { padding: 80px 5%; background: var(--white); }
+
+  .dest-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    gap: 1.2rem;
+  }
+  .dest-grid .featured {
+    grid-column: span 2;
+    grid-row: span 1;
+  }
+
+  .dest-card {
+    border-radius: 20px; overflow: hidden; position: relative; cursor: pointer;
+    transition: transform .35s, box-shadow .35s;
+    aspect-ratio: 4/3;
+    background: #1a2a3a;
+  }
+  .dest-card.featured { aspect-ratio: 16/8; }
+  .dest-card:hover { transform: scale(1.025); box-shadow: 0 16px 45px rgba(0,0,0,.28); }
+
+  .dest-bg {
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center;
+    transition: transform .45s ease;
+  }
+  .dest-card:hover .dest-bg { transform: scale(1.07); }
+
+  .dest-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(5,20,55,.88) 0%, rgba(0,0,0,.15) 55%, transparent 100%);
+  }
+  .dest-info { position: absolute; bottom: 1.4rem; left: 1.4rem; right: 1.4rem; }
+  .dest-tag {
+    display: inline-block;
+    background: var(--gold); color: var(--navy-dark);
+    font-size: .7rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+    padding: .22rem .65rem; border-radius: 50px; margin-bottom: .5rem;
+  }
+  .dest-city { font-size: 1.35rem; font-weight: 700; color: var(--white); font-family: 'Playfair Display', serif; line-height: 1.2; }
+  .dest-card.featured .dest-city { font-size: 2rem; }
+  .dest-country { font-size: .82rem; color: rgba(255,255,255,.72); margin-top: .2rem; }
+  .dest-price {
+    position: absolute; top: 1rem; right: 1rem;
+    background: rgba(255,255,255,.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,.25);
+    color: var(--white);
+    padding: .32rem .8rem; border-radius: 50px;
+    font-size: .8rem; font-weight: 700;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .how { padding: 80px 5%; background: linear-gradient(135deg, var(--navy-dark), var(--navy)); }
+  .how .section-label { color: var(--gold-light); }
+  .how .section-title { color: var(--white); }
+
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; position: relative; }
+  .steps::before {
+    content: ''; position: absolute; top: 36px; left: 10%; right: 10%;
+    height: 1px; background: rgba(255,255,255,.15);
+  }
+
+  .step { text-align: center; position: relative; }
+  .step-num {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.25rem; font-size: 1.5rem;
+    position: relative;
+  }
+  .step-num::after {
+    content: attr(data-n);
+    position: absolute; top: -8px; right: -8px;
+    background: var(--gold); color: var(--navy-dark);
+    width: 22px; height: 22px; border-radius: 50%;
+    font-size: .72rem; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .step h3 { color: var(--white); font-size: 1rem; font-weight: 600; margin-bottom: .5rem; }
+  .step p { color: rgba(255,255,255,.6); font-size: .85rem; line-height: 1.6; }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials { padding: 80px 5%; background: var(--off-white); }
+
+  .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+  .testi-card {
+    background: var(--white); border-radius: 16px; padding: 2rem;
+    border: 1px solid var(--border);
+  }
+  .stars { color: var(--gold); font-size: 1rem; margin-bottom: 1rem; letter-spacing: .1em; }
+  .testi-text { font-size: .95rem; color: var(--text); line-height: 1.7; margin-bottom: 1.5rem; font-style: italic; }
+  .testi-author { display: flex; align-items: center; gap: .75rem; }
+  .avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    font-weight: 700; font-size: .95rem; color: var(--white);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .av1 { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+  .av2 { background: linear-gradient(135deg, #10b981, #047857); }
+  .av3 { background: linear-gradient(135deg, #f59e0b, #b45309); }
+  .author-name { font-weight: 600; font-size: .9rem; }
+  .author-loc { font-size: .8rem; color: var(--muted); }
+
+  /* ── CTA STRIP ── */
+  .cta-strip {
+    padding: 80px 5%; text-align: center;
+    background: linear-gradient(135deg, #0ea5e9 0%, var(--navy) 100%);
+    position: relative; overflow: hidden;
+  }
+  .cta-strip::before {
+    content: '✈'; position: absolute;
+    font-size: 20rem; color: rgba(255,255,255,.04);
+    top: -60px; right: 5%; line-height: 1;
+  }
+  .cta-strip h2 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3rem); color: var(--white); margin-bottom: 1rem; }
+  .cta-strip p { color: rgba(255,255,255,.75); max-width: 480px; margin: 0 auto 2rem; font-size: 1.05rem; }
+  .cta-btn {
+    display: inline-flex; align-items: center; gap: .6rem;
+    background: var(--gold); color: var(--navy-dark);
+    padding: .9rem 2.5rem; border-radius: 50px;
+    font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 1rem;
+    text-decoration: none; transition: all .2s; border: none; cursor: pointer;
+  }
+  .cta-btn:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,.2); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy-dark); color: rgba(255,255,255,.65);
+    padding: 60px 5% 30px;
+  }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+  .footer-brand .nav-logo { font-size: 1.4rem; display: block; margin-bottom: .75rem; white-space: normal; }
+  .footer-brand p { font-size: .88rem; line-height: 1.7; color: rgba(255,255,255,.5); max-width: 280px; }
+  .footer-col h4 { color: var(--white); font-size: .9rem; font-weight: 600; margin-bottom: 1rem; }
+  .footer-col ul { list-style: none; }
+  .footer-col li { margin-bottom: .5rem; }
+  .footer-col a { color: rgba(255,255,255,.5); text-decoration: none; font-size: .85rem; transition: color .2s; }
+  .footer-col a:hover { color: var(--gold); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,.08); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; font-size: .8rem; }
+
+  /* ── CITY SUGGESTIONS ── */
+  .field.has-autocomplete { position: relative; overflow: visible; }
+  .suggestions-dropdown {
+    position: absolute; top: calc(100% + 4px); left: 0;
+    background: var(--white); border-radius: 14px;
+    box-shadow: 0 16px 50px rgba(5,56,129,.18);
+    border: 1px solid var(--border);
+    z-index: 999; min-width: 300px; max-height: 320px;
+    overflow-y: auto; display: none;
+    animation: dropIn .18s ease;
+  }
+  @keyframes dropIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+  .suggestions-dropdown.visible { display: block; }
+
+  .sugg-header {
+    padding: .65rem 1rem .35rem;
+    font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted); border-bottom: 1px solid var(--border);
+  }
+  .sugg-item {
+    display: flex; align-items: center; gap: .85rem;
+    padding: .75rem 1rem; cursor: pointer; transition: background .15s;
+  }
+  .sugg-item:hover, .sugg-item.highlighted { background: #f0f7ff; }
+  .sugg-icon {
+    width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+    background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+    display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+  }
+  .sugg-info { flex: 1; min-width: 0; }
+  .sugg-city { font-weight: 600; font-size: .92rem; color: var(--text); }
+  .sugg-airport { font-size: .78rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sugg-code {
+    font-size: .78rem; font-weight: 700; color: var(--navy);
+    background: #e0f0ff; padding: .2rem .5rem; border-radius: 6px; flex-shrink: 0;
+  }
+
+  .field-wrap { position: relative; }
+  .field-wrap input { width: 100%; }
+
+  /* ── HAMBURGER & MOBILE MENU ── */
+  .hamburger {
+    display: none; flex-direction: column; justify-content: center; gap: 5px;
+    width: 40px; height: 40px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+    border-radius: 10px; cursor: pointer; padding: 8px;
+    transition: background .2s;
+  }
+  .hamburger:hover { background: rgba(255,255,255,.18); }
+  .hamburger span {
+    display: block; height: 2px; background: var(--white); border-radius: 2px;
+    transition: all .3s ease; transform-origin: center;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .menu-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45);
+    z-index: 199; backdrop-filter: blur(2px);
+  }
+  .menu-overlay.visible { display: block; }
+
+  .mobile-menu {
+    position: fixed; top: 0; right: -300px; width: 280px; height: 100vh;
+    background: var(--navy-dark); z-index: 200;
+    display: flex; flex-direction: column;
+    padding: 90px 0 2rem;
+    transition: right .35s cubic-bezier(.4,0,.2,1);
+    box-shadow: -8px 0 40px rgba(0,0,0,.3);
+  }
+  .mobile-menu.open { right: 0; }
+
+  .mobile-links { list-style: none; flex: 1; }
+  .mobile-links li { border-bottom: 1px solid rgba(255,255,255,.06); }
+  .mobile-links a {
+    display: block; padding: 1rem 1.8rem;
+    color: rgba(255,255,255,.85); text-decoration: none;
+    font-size: 1rem; font-weight: 500; letter-spacing: .01em;
+    transition: all .2s;
+  }
+  .mobile-links a:hover { color: var(--gold); background: rgba(255,255,255,.05); padding-left: 2.2rem; }
+
+  .mobile-cta {
+    margin: 1.5rem 1.8rem 0;
+    background: var(--gold); color: var(--navy-dark);
+    border: none; padding: .85rem; border-radius: 50px;
+    font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 1rem;
+    cursor: pointer; transition: all .2s;
+  }
+  .mobile-cta:hover { background: var(--gold-light); }
+
+/* SUPPORT POPUP MAIN */
+.support-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  backdrop-filter: blur(4px);
+}
+
+.support-popup.show {
+  display: flex;
+}
+
+/* POPUP ANIMATION */
+@keyframes popupFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* POPUP BOX (COMPACT) */
+.support-popup-box {
+  width: 100%;
+  max-width: 420px;
+  max-height: 85vh;
+  overflow: hidden;
+  border-radius: 18px;
+  background: white;
+  animation: popupFade .30s ease;
+  box-shadow: 0 20px 55px rgba(0,0,0,0.30);
+  position: relative;
+}
+
+/* TOP SECTION */
+.support-top {
+  background: linear-gradient(135deg, #155eaa, #16b5d8);
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  position: relative;
+  gap: 12px;
+}
+
+/* LIVE BADGE */
+.live-badge {
+  color: #7CFF95;
+  font-size: 10px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+/* HEADING */
+.support-top h2 {
+  font-size: 22px;
+  line-height: 1.15;
+  margin-bottom: 6px;
+  font-weight: 800;
+}
+
+/* SUBTEXT */
+.support-top p {
+  font-size: 13px;
+  color: rgba(255,255,255,0.9);
+  line-height: 1.4;
+  max-width: 240px;
+}
+
+/* AGENT IMAGE */
+.support-agent {
+  position: relative;
+}
+
+.support-agent img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.85);
+}
+
+/* ONLINE DOT */
+.online-dot {
+  width: 14px;
+  height: 14px;
+  background: #4ade80;
+  border-radius: 50%;
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  border: 2px solid white;
+}
+
+/* BODY */
+.support-body {
+  padding: 14px;
+}
+
+/* BODY TITLE */
+.support-body h3 {
+  text-align: center;
+  color: #94a3b8;
+  letter-spacing: 1.5px;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+/* GRID */
+.support-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+/* SUPPORT CARD */
+.support-card {
+  background: #f1f5f9;
+  border-radius: 14px;
+  padding: 10px;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+/* CARD ICON */
+.support-card .icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* CARD TITLE */
+.support-card strong {
+  display: block;
+  font-size: 13px;
+  color: #0f172a;
+  margin-bottom: 2px;
+}
+
+/* CARD TEXT */
+.support-card span {
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+/* CALL BUTTON */
+.support-call-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 14px;
+  background: linear-gradient(90deg, #1d4ed8, #3b82f6);
+  color: white;
+  text-decoration: none;
+  padding: 12px;
+  border-radius: 14px;
+  font-size: 18px;
+  font-weight: 800;
+  transition: .25s;
+}
+
+.support-call-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* CLOSE BUTTON */
+.support-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.2);
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .support-popup-box { max-width: 94%; max-height: 88vh; }
+  .support-top { flex-direction: column; text-align: center; padding: 12px; }
+  .support-top h2 { font-size: 20px; }
+  .support-top p { font-size: 12px; max-width: 100%; }
+  .support-agent img { width: 70px; height: 70px; }
+  .support-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+  .support-card { padding: 8px; }
+  .support-card strong { font-size: 12px; }
+  .support-card span { font-size: 10px; }
+  .support-call-btn { font-size: 16px; padding: 10px; }
+}
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .search-fields { grid-template-columns: 1fr 1fr; }
+    .search-btn { grid-column: span 2; padding: 1rem; }
+    .dest-grid { grid-template-columns: 1fr 1fr; }
+    .dest-grid .featured { grid-column: span 2; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .nav-links { display: none; }
+    .desktop-only { display: none; }
+    .hamburger { display: flex; }
+    .steps::before { display: none; }
+  }
+  @media (max-width: 600px) {
+    .hero-stats { gap: 1.5rem; }
+    .search-fields { grid-template-columns: 1fr; }
+    .search-btn { grid-column: span 1; }
+    .footer-top { grid-template-columns: 1fr; }
+    .dest-grid { grid-template-columns: 1fr; }
+    .dest-grid .featured { grid-column: span 1; aspect-ratio: 16/9; }
+  }
+
+ /* ── LEGAL DISCLOSURE ── */
+.legal-disclosure {
+  background: #053881;
+  padding: 28px 5%;
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.legal-container {
+  max-width: 1250px;
+  margin: 0 auto;
+}
+
+.legal-disclosure h3 {
+  color: var(--white);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.legal-disclosure .copyright {
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 22px;
+  font-size: 0.8rem;
+}
+
+.legal-block {
+  color: rgba(255,255,255,0.72);
+  font-size: 0.82rem;
+  line-height: 1.9;
+  margin-bottom: 20px;
+}
+
+.legal-block span {
+  color: #00c2ff;
+  font-weight: 700;
+}
+
+.legal-contact {
+  margin-top: 22px;
+  color: rgba(255,255,255,0.8);
+  font-size: 0.85rem;
+}
+
+.legal-contact a {
+  color: #00c2ff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.legal-contact a:hover {
+  color: var(--gold-light);
+}
+
+@media (max-width: 768px) {
+  .legal-disclosure { padding: 24px 18px; }
+  .legal-disclosure h3 { font-size: 1rem; }
+  .legal-block { font-size: 0.78rem; line-height: 1.7; }
+  .legal-contact { font-size: 0.78rem; }
+}
+</style>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F0YMPGEH83"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-F0YMPGEH83');
+</script>
+</head>
+<body>
+
+  <!-- FLOATING CALL BUTTON (unchanged) -->
+<a href="tel:+18444495490" id="floatingCallBtn" style="
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #1a1f3c;
+  border-radius: 50px;
+  padding: 13px 24px 13px 14px;
+  text-decoration: none;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+  white-space: nowrap;
+">
+  <span style="width: 42px; height: 42px; border-radius: 50%; background: #3b82f6; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012.18 0h3a2 2 0 012 1.72c.13 1 .36 1.98.71 2.9a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.18 6.18l1.18-1.18a2 2 0 012.11-.45c.92.35 1.9.58 2.9.71A2 2 0 0122 16.92z"/>
+    </svg>
+  </span>
+  <span style="width: 1px; height: 28px; background: rgba(255,255,255,0.18); flex-shrink:0;"></span>
+  <span>
+    <span style="display:block; font-family:'DM Sans',sans-serif; font-size:17px; font-weight:600; color:#3b82f6; letter-spacing:0.01em;">+1 (844) 449-5490</span>
+    <span style="display:block; font-family:'DM Sans',sans-serif; font-size:12px; color:rgba(255,255,255,0.55); margin-top:1px;">Book online or call us</span>
+  </span>
+</a>
+
+<nav>
+  <div class="nav-logo">Book Now <span>Flight</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="disclaimer.html">Disclaimer</a></li>
+    <li><a href="privacy-policy.html">Privacy Policy</a></li>
+    <li><a href="contact.html">Contact Us</a></li>
+  </ul>
+  <button class="nav-cta desktop-only" onclick="window.location.href='tel:+18444495490'">Call +1 (844) 449-5490</button>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <ul class="mobile-links">
+    <li><a href="index.html" onclick="closeMenu()">Home</a></li>
+    <li><a href="about.html" onclick="closeMenu()">About us</a></li>
+    <li><a href="disclaimer.html" onclick="closeMenu()">Disclaimer</a></li>
+    <li><a href="privacy-policy.html" onclick="closeMenu()">Privacy Policy</a></li>
+    <li><a href="contact.html" onclick="closeMenu()">Contact Us</a></li>
+  </ul>
+  <button class="mobile-cta" onclick="window.location.href='tel:+18444495490'">Call +1 (844) 449-5490</button>
+</div>
+<div class="menu-overlay" id="menu-overlay" onclick="closeMenu()"></div>
+
+<!-- HERO (unchanged but brand name removed) -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Your Trusted Travel Partner</div>
+    <h1>Travel the World,<br /><em>Tickets With Ease</em></h1>
+    <p>Search, compare, and book flights worldwide with confidence. Dedicated support every step of your journey.</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">500<span>+</span></div><div class="stat-label">Airlines</div></div>
+      <div class="stat"><div class="stat-num">190<span>+</span></div><div class="stat-label">Countries</div></div>
+      <div class="stat"><div class="stat-num">2M<span>+</span></div><div class="stat-label">Happy Travelers</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SEARCH BOX (fully functional) -->
+<div class="search-wrapper">
+  <div class="search-box">
+    <div class="trip-tabs">
+      <button class="trip-tab active" onclick="setTab(this)">One Way</button>
+      <button class="trip-tab" onclick="setTab(this)">Round Trip</button>
+      <button class="trip-tab" onclick="setTab(this)">Multi-City</button>
+    </div>
+    <div class="search-fields">
+      <div class="field has-autocomplete" id="field-from"><div class="field-label">From</div><div class="field-wrap"><input id="input-from" type="text" placeholder="City or Airport" autocomplete="off" oninput="showSuggestions('from', this.value)" onfocus="showSuggestions('from', this.value)" onkeydown="handleKey(event, 'from')" /></div><div class="field-sub" id="sub-from"></div><div class="suggestions-dropdown" id="sugg-from"></div></div>
+      <div class="field has-autocomplete" id="field-to"><div class="field-label">To</div><div class="field-wrap"><input id="input-to" type="text" placeholder="City or Airport" autocomplete="off" oninput="showSuggestions('to', this.value)" onfocus="showSuggestions('to', this.value)" onkeydown="handleKey(event, 'to')" /></div><div class="field-sub" id="sub-to"></div><div class="suggestions-dropdown" id="sugg-to"></div></div>
+      <div class="field"><div class="field-label">Departure</div><input type="date" /><div class="field-sub">Monday</div></div>
+      <div class="field"><div class="field-label">Passengers</div><select><option>1 Adult</option><option>2 Adults</option><option>3 Adults</option><option>2 Adults, 1 Child</option></select><div class="field-sub">Economy Class</div></div>
+      <button class="search-btn" onclick="handleSearch()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Search</button>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES, DESTINATIONS, ETC (same content, brand updated only in footer & legal) -->
+<section class="features"><div class="section-label">Why Choose Us</div><div class="section-title">Everything You Need for Seamless Travel</div><div class="features-grid"><div class="feature-card"><div class="feature-icon">✈️</div><h3>500+ Airlines</h3><p>Compare fares across all major and budget airlines worldwide to find the best deal for you.</p></div><div class="feature-card"><div class="feature-icon">💰</div><h3>Best Price Guarantee</h3><p>We match any lower price you find. Book with confidence knowing you always get the best rate.</p></div><div class="feature-card"><div class="feature-icon">🛡️</div><h3>Secure Booking</h3><p>Your payments and personal data are protected with bank-grade 256-bit encryption.</p></div><div class="feature-card"><div class="feature-icon">📞</div><h3>24/7 Support</h3><p>Our travel experts are available around the clock to assist with any changes or emergencies.</p></div></div></section>
+
+<section class="destinations"><div class="section-label">Popular Routes</div><div class="section-title">Top Destinations Right Now</div><div class="dest-grid"><div class="dest-card featured"><div class="dest-bg" style="background-image:url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=900&q=80&fit=crop')"></div><div class="dest-overlay"></div><div class="dest-price">From ₹18,500</div><div class="dest-info"><div class="dest-tag">✈ Most Popular</div><div class="dest-city">Dubai</div><div class="dest-country">United Arab Emirates · 4h 30m flight</div></div></div><div class="dest-card"><div class="dest-bg" style="background-image:url('https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=600&q=80&fit=crop')"></div><div class="dest-overlay"></div><div class="dest-price">From ₹42,000</div><div class="dest-info"><div class="dest-city">London</div><div class="dest-country">United Kingdom</div></div></div><div class="dest-card"><div class="dest-bg" style="background-image:url('https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=600&q=80&fit=crop')"></div><div class="dest-overlay"></div><div class="dest-price">From ₹55,000</div><div class="dest-info"><div class="dest-city">New York</div><div class="dest-country">United States</div></div></div><div class="dest-card"><div class="dest-bg" style="background-image:url('https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80&fit=crop')"></div><div class="dest-overlay"></div><div class="dest-price">From ₹48,000</div><div class="dest-info"><div class="dest-city">Paris</div><div class="dest-country">France</div></div></div><div class="dest-card"><div class="dest-bg" style="background-image:url('https://images.unsplash.com/photo-1600664356348-10686526af4f?q=80&w=1175&auto=format&fit=crop')"></div><div class="dest-overlay"></div><div class="dest-price">From ₹22,000</div><div class="dest-info"><div class="dest-city">Singapore</div><div class="dest-country">Singapore</div></div></div><div class="dest-card"><div class="dest-bg" style="background-image:url('https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80&fit=crop')"></div><div class="dest-overlay"></div><div class="dest-price">From ₹38,000</div><div class="dest-info"><div class="dest-city">Tokyo</div><div class="dest-country">Japan</div></div></div><div class="dest-card"><div class="dest-bg" style="background-image:url('https://images.unsplash.com/photo-1518639192441-8fce0a366e2e?q=80&w=1171&auto=format&fit=crop')"></div><div class="dest-overlay"></div><div class="dest-price">From ₹38,000</div><div class="dest-info"><div class="dest-city">São Paulo</div><div class="dest-country">Brazil</div></div></div><div class="dest-card"><div class="dest-bg" style="background-image:url('https://plus.unsplash.com/premium_photo-1693149386423-2e4e264712e5?q=80&w=1332&auto=format&fit=crop')"></div><div class="dest-overlay"></div><div class="dest-price">From ₹38,000</div><div class="dest-info"><div class="dest-city">Bangkok</div><div class="dest-country">Thailand</div></div></div></div></section>
+
+<section class="how"><div class="section-label">Simple Process</div><div class="section-title">Book Your Flight in Minutes</div><div class="steps"><div class="step"><div class="step-num" data-n="1">🔍</div><h3>Search Flights</h3><p>Enter your origin, destination, and travel dates to see all available options.</p></div><div class="step"><div class="step-num" data-n="2">🔄</div><h3>Compare & Choose</h3><p>Filter by price, duration, stops, or airline. Pick the flight that suits you best.</p></div><div class="step"><div class="step-num" data-n="3">💳</div><h3>Secure Payment</h3><p>Complete your booking with our secure checkout. We accept all major cards and UPI.</p></div><div class="step"><div class="step-num" data-n="4">📧</div><h3>Get E-Ticket</h3><p>Receive your confirmed e-ticket instantly via email. Ready to fly!</p></div></div></section>
+
+<section class="testimonials"><div class="section-label">What Travelers Say</div><div class="section-title">Trusted by Millions of Happy Flyers</div><div class="testi-grid"><div class="testi-card"><div class="stars">★★★★★</div><p class="testi-text">"Found the cheapest Delhi to Dubai ticket here. The process was smooth and my e-ticket arrived instantly. Will definitely use again!"</p><div class="testi-author"><div class="avatar av1">RK</div><div><div class="author-name">Rahul Kumar</div><div class="author-loc">New Delhi, India</div></div></div></div><div class="testi-card"><div class="stars">★★★★★</div><p class="testi-text">"The customer support is outstanding. Had a last-minute change request and they handled it within the hour. Highly recommend!"</p><div class="testi-author"><div class="avatar av2">PS</div><div><div class="author-name">Priya Sharma</div><div class="author-loc">Mumbai, India</div></div></div></div><div class="testi-card"><div class="stars">★★★★★</div><p class="testi-text">"Booked family tickets to London. Best prices I found anywhere. The whole family trip was stress-free."</p><div class="testi-author"><div class="avatar av3">AK</div><div><div class="author-name">Amit Kapoor</div><div class="author-loc">Ludhiana, Punjab</div></div></div></div></div></section>
+
+<section class="cta-strip"><h2>Ready to Take Off?</h2><p>Join over 2 million travelers who book with confidence every day.</p><button class="cta-btn">✈ Book Your Flight Now</button></section>
+
+<!-- FOOTER with brand rename -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand"><span class="nav-logo">Book Now <span>Flight</span></span><p>Travel tickets with ease. Search, compare, and book flights worldwide with dedicated 24/7 support. Operated by Book Now Flight.</p></div>
+    <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="#">Flight Search</a></li><li><a href="#">Cheap Flights</a></li><li><a href="#">International Flights</a></li><li><a href="#">Domestic Flights</a></li></ul></div>
+    <div class="footer-col"><h4>Company</h4><ul><li><a href="#">About Us</a></li><li><a href="#">Careers</a></li><li><a href="#">Press</a></li><li><a href="#">Contact</a></li></ul></div>
+    <div class="footer-col"><h4>Support</h4><ul><li><a href="#">Help Center</a></li><li><a href="#">Manage Booking</a></li><li><a href="#">Refund Policy</a></li><li><a href="#">Privacy Policy</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><span>© 2026 Book Now Flight. All rights reserved.</span><span>✈ Travel Tickets With Ease</span></div>
+</footer>
+
+<!-- LEGAL DISCLOSURE (updated brand references) -->
+<section class="legal-disclosure"><div class="legal-container"><h3>This site is Managed by Book Now Flight LLC</h3><p class="copyright">Copyright © 2026 All Rights Reserved</p><div class="legal-block"><span>Affiliate Disclosure:</span> Our website participates in various affiliate and partner programs, which means we may earn commissions when users book flights or services through our links. Book Now Flight is an independent travel platform and is not directly affiliated with or endorsed by any airline, hotel, or travel brand mentioned on this website. All trademarks, logos, and brand names belong to their respective owners and are used for informational purposes only.</div><div class="legal-block"><span>Call Consent:</span> By calling the support numbers listed on this website, you consent to receive assistance and information related to travel bookings, modifications, cancellations, and promotional offers. Calls may be monitored or recorded for quality and training purposes. Standard carrier charges may apply depending on your telecom provider.</div><div class="legal-block"><span>Travel Services Disclaimer:</span> Book Now Flight acts as an independent travel assistance provider. We help customers compare travel options and connect with airlines or service providers when required. Additional airline policies, fare rules, cancellation fees, and service charges may apply depending on the booking.</div><div class="legal-contact">Customer Support: <a href="tel:+18444495490">+1 (844) 449-5490</a> | Email: <a href="mailto:contact@booknowflight.com">contact@booknowflight.com</a></div></div></section>
+
+<!-- SUPPORT POPUP (unchanged) -->
+<div id="supportPopup" class="support-popup"><div class="support-popup-box"><button class="support-close" onclick="closeSupportPopup()">×</button><div class="support-top"><div class="support-text"><div class="live-badge">● LIVE AGENTS AVAILABLE NOW</div><h2>Need Help<br>With Your Flight?</h2><p>Speak with a live travel expert — no bots, no wait.</p></div><div class="support-agent"><img src="https://previews.123rf.com/images/vgstudio/vgstudio1905/vgstudio190500099/122464860-call-center-service-photo-of-customer-support-agent-female-caller-or-receptionist-phone-operator.jpg" alt="Agent" /><span class="online-dot"></span></div></div><div class="support-body"><h3>HOW WE CAN HELP</h3><div class="support-grid"><div class="support-card"><div class="icon">✈</div><div><strong>Flight Changes</strong><span>Modify dates & routes</span></div></div><div class="support-card"><div class="icon">✖</div><div><strong>Cancellations</strong><span>Refund assistance</span></div></div><div class="support-card"><div class="icon">⬆</div><div><strong>Seat Upgrades</strong><span>Business & first class</span></div></div><div class="support-card"><div class="icon">📝</div><div><strong>Name Corrections</strong><span>Ticket name fixes</span></div></div><div class="support-card"><div class="icon">📅</div><div><strong>New Bookings</strong><span>500+ airlines available</span></div></div><div class="support-card"><div class="icon">🕒</div><div><strong>24/7 Support</strong><span>Available anytime</span></div></div></div><a href="tel:+18444495490" class="support-call-btn">📞 +1 (844) 449-5490</a></div></div></div>
+
+<script>
+  // preserve all interactive functions (same as original, no brand references needed)
+  let AIRPORTS = [], airportsLoaded = false, airportsLoading = false;
+  const countryFlags = {'India':'🇮🇳','United States':'🇺🇸','United Kingdom':'🇬🇧','Canada':'🇨🇦','Australia':'🇦🇺','Germany':'🇩🇪','France':'🇫🇷','Italy':'🇮🇹','Spain':'🇪🇸','Japan':'🇯🇵','China':'🇨🇳','Singapore':'🇸🇬','Thailand':'🇹🇭','UAE':'🇦🇪','Qatar':'🇶🇦','Turkey':'🇹🇷','Brazil':'🇧🇷'};
+  function getFlagEmoji(c){ return countryFlags[c] || '🌍'; }
+  function parseCSVLine(l){ let r=[],q=!1,f=''; for(let i=0;i<l.length;i++){let c=l[i];if(c==='"')q=!q;else if(c===','&&!q)r.push(f),f='';else f+=c;}r.push(f);return r.map(v=>v.trim());}
+  async function loadAirportsFromCDN(){if(airportsLoaded||airportsLoading)return;airportsLoading=true;try{const r=await fetch('https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat');if(!r.ok)throw new Error();const t=await r.text(),lines=t.split('\n'),map=new Map();for(let line of lines){if(!line.trim())continue;let f=parseCSVLine(line);if(f.length<6)continue;let iata=f[4];if(iata&&iata!=='\\N'&&iata.length===3&&/^[A-Z]{3}$/.test(iata)&&!map.has(iata)){let cty=f[2].replace(/^"|"$/g,'').split('/')[0].trim(),name=f[1].replace(/^"|"$/g,'').split('/')[0].trim(),cnt=f[3].replace(/^"|"$/g,'').trim();if(!cty||cty==='\\N')cty=name.split(' ')[0];map.set(iata,{city:cty,airport:name,code:iata,country:cnt,flag:getFlagEmoji(cnt)});}}AIRPORTS=Array.from(map.values());AIRPORTS.sort((a,b)=>a.city.localeCompare(b.city));airportsLoaded=true;console.log(`Loaded ${AIRPORTS.length} airports`);}catch(e){console.warn("fallback airports");AIRPORTS=[{city:'New Delhi',airport:'IGI',code:'DEL',country:'India',flag:'🇮🇳'},{city:'Mumbai',code:'BOM',airport:'CSIA',country:'India',flag:'🇮🇳'},{city:'Dubai',code:'DXB',airport:'DXB Intl',country:'UAE',flag:'🇦🇪'},{city:'London',code:'LHR',airport:'Heathrow',country:'UK',flag:'🇬🇧'},{city:'New York',code:'JFK',airport:'JFK',country:'USA',flag:'🇺🇸'},{city:'Singapore',code:'SIN',airport:'Changi',country:'Singapore',flag:'🇸🇬'}];}finally{airportsLoading=false;}}
+  let searchTimeout=null,hiIdx={from:-1,to:-1};
+  function showSuggestions(which,query){let d=document.getElementById('sugg-'+which),q=query.trim().toLowerCase();if(searchTimeout)clearTimeout(searchTimeout);if(!airportsLoaded&&!airportsLoading)loadAirportsFromCDN();if(!airportsLoaded){d.innerHTML='<div class="sugg-header">⏳ Loading airports...</div>';d.classList.add('visible');return;}let matches=q.length===0?AIRPORTS.slice(0,12):AIRPORTS.filter(a=>a.city.toLowerCase().includes(q)||a.code.toLowerCase().includes(q)||a.country.toLowerCase().includes(q)||a.airport.toLowerCase().includes(q)).slice(0,15);if(matches.length===0){d.classList.remove('visible');return;}let header=q.length===0?'<div class="sugg-header">✈ Popular Airports</div>':`<div class="sugg-header">🔍 ${matches.length} results for "${query}"</div>`;d.innerHTML=header+matches.map((a,i)=>`<div class="sugg-item" data-idx="${i}" data-which="${which}" onclick="selectCity('${which}','${a.city.replace(/'/g,"\\'")}','${a.code}','${a.airport.replace(/'/g,"\\'")}')" onmouseenter="highlight(this,'${which}',${i})"><div class="sugg-icon">${a.flag}</div><div class="sugg-info"><div class="sugg-city">${a.city}</div><div class="sugg-airport">${a.airport} · ${a.country}</div></div><div class="sugg-code">${a.code}</div></div>`).join('');hiIdx[which]=-1;d.classList.add('visible');}
+  function highlight(el,which,idx){document.querySelectorAll(`#sugg-${which} .sugg-item`).forEach(i=>i.classList.remove('highlighted'));el.classList.add('highlighted');hiIdx[which]=idx;}
+  function handleKey(e,which){let d=document.getElementById('sugg-'+which);if(!d.classList.contains('visible'))return;let items=d.querySelectorAll('.sugg-item');if(e.key==='ArrowDown'){e.preventDefault();hiIdx[which]=Math.min(hiIdx[which]+1,items.length-1);updateHighlight(which);}else if(e.key==='ArrowUp'){e.preventDefault();hiIdx[which]=Math.max(hiIdx[which]-1,0);updateHighlight(which);}else if(e.key==='Enter'&&hiIdx[which]>=0){e.preventDefault();items[hiIdx[which]].click();}else if(e.key==='Escape')d.classList.remove('visible');}
+  function updateHighlight(which){let items=document.querySelectorAll(`#sugg-${which} .sugg-item`);items.forEach((it,i)=>it.classList.toggle('highlighted',i===hiIdx[which]));if(hiIdx[which]>=0&&items[hiIdx[which]])items[hiIdx[which]].scrollIntoView({block:'nearest'});}
+  function selectCity(which,city,code,airport){document.getElementById('input-'+which).value=`${city} (${code})`;document.getElementById('sub-'+which).textContent=airport;document.getElementById('sugg-'+which).classList.remove('visible');validateSearchForm();}
+  document.addEventListener('click',(e)=>{['from','to'].forEach(w=>{let field=document.getElementById('field-'+w),sugg=document.getElementById('sugg-'+w);if(field&&sugg&&!field.contains(e.target))sugg.classList.remove('visible');});});
+  function setTab(el){document.querySelectorAll('.trip-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');}
+  function validateSearchForm(){let fromVal=document.getElementById('input-from').value.trim(),toVal=document.getElementById('input-to').value.trim(),departDate=document.querySelector('.field input[type="date"]').value,searchBtn=document.querySelector('.search-btn');if(fromVal&&toVal&&departDate){searchBtn.disabled=false;searchBtn.style.opacity="1";searchBtn.style.cursor="pointer";}else{searchBtn.disabled=true;searchBtn.style.opacity="0.6";searchBtn.style.cursor="not-allowed";}}
+  function handleSearch(){let fromVal=document.getElementById('input-from').value.trim(),toVal=document.getElementById('input-to').value.trim(),departDate=document.querySelector('.field input[type="date"]').value,passengers=document.querySelector('.field select').value,activeTab=document.querySelector('.trip-tab.active').innerText;if(!fromVal||!toVal||!departDate){alert("Please fill all required fields.");return;}let searchData={fromVal,toVal,departDate,passengers,tripType:activeTab};sessionStorage.setItem('skyway_search_context',JSON.stringify(searchData));window.location.href='results.html';}
+  window.addEventListener('DOMContentLoaded',()=>{loadAirportsFromCDN();let fromInput=document.getElementById('input-from'),toInput=document.getElementById('input-to'),dateInput=document.querySelector('.field input[type="date"]');if(fromInput)fromInput.addEventListener('input',validateSearchForm);if(toInput)toInput.addEventListener('input',validateSearchForm);if(dateInput)dateInput.addEventListener('change',validateSearchForm);if(dateInput&&!dateInput.value){let tomorrow=new Date();tomorrow.setDate(tomorrow.getDate()+1);dateInput.value=tomorrow.toISOString().split('T')[0];}validateSearchForm();});
+  function openSupportPopup(){document.getElementById('supportPopup').classList.add('show');}function closeSupportPopup(){document.getElementById('supportPopup').classList.remove('show');}
+  setTimeout(()=>{openSupportPopup();},5000);
+  let popupDiv=document.getElementById('supportPopup');if(popupDiv)popupDiv.addEventListener('click',function(e){if(e.target===this)closeSupportPopup();});
+  function toggleMenu(){let menu=document.getElementById('mobile-menu'),overlay=document.getElementById('menu-overlay'),btn=document.getElementById('hamburger'),isOpen=menu.classList.toggle('open');overlay.classList.toggle('visible',isOpen);btn.classList.toggle('open',isOpen);document.body.style.overflow=isOpen?'hidden':'';}function closeMenu(){document.getElementById('mobile-menu').classList.remove('open');document.getElementById('menu-overlay').classList.remove('visible');document.getElementById('hamburger').classList.remove('open');document.body.style.overflow='';}
+</script>
+</body>
+</html>

@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Book Now Flight | Flight Results</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+
+:root {
+    --navy: #053881;
+    --navy-dark: #021f4a;
+    --sky: #0ea5e9;
+    --gold: #f59e0b;
+    --gold-light: #fcd34d;
+    --white: #ffffff;
+    --off-white: #f8fafc;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --card-bg: rgba(255,255,255,0.95);
+  }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+     /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%; height: 70px;
+    background: rgba(5,56,129,0.95);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+    animation: slideDown .6s ease;
+  }
+  @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; font-weight: 900;
+    color: var(--white);
+    letter-spacing: -0.3px;
+    white-space: nowrap;
+  }
+  @media (max-width: 550px) {
+    .nav-logo { font-size: 1.2rem; }
+  }
+  .nav-logo span { color: var(--gold); }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: rgba(255,255,255,0.85); text-decoration: none; font-size: .9rem; font-weight: 500; transition: color .2s; }
+  .nav-links a:hover { color: var(--gold); }
+
+  .nav-cta {
+    background: var(--gold); color: var(--navy-dark);
+    border: none; padding: .55rem 1.4rem; border-radius: 50px;
+    font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: .9rem;
+    cursor: pointer; transition: all .2s;
+  }
+  .nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); box-shadow: 0 4px 15px rgba(245,158,11,.4); }
+
+  
+
+
+    /* result page */
+    .result-page {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 100px 24px 60px;
+    }
+
+    /* header row with back button */
+    .result-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .back-btn {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 48px;
+      padding: 10px 20px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+      color: #1e293b;
+      background: #ffffff;
+    }
+
+    .back-btn:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      transform: translateX(-2px);
+    }
+
+    .route-summary {
+      background: white;
+      border-radius: 28px;
+      padding: 18px 28px;
+      flex: 1;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      border: 1px solid #eef2ff;
+    }
+
+    .route-badge {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 12px 20px;
+    }
+
+    .city-pair {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+
+    .city-pair .from-code, .city-pair .to-code {
+      background: #eef2ff;
+      padding: 4px 12px;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #053881;
+    }
+
+    .arrow-icon {
+      font-size: 1.3rem;
+      color: #64748b;
+    }
+
+    .date-info {
+      color: #475569;
+      font-size: 0.85rem;
+      background: #f8fafc;
+      padding: 4px 12px;
+      border-radius: 30px;
+    }
+
+    /* loading state */
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 70px 20px;
+      background: white;
+      border-radius: 32px;
+      margin-top: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+      border: 1px solid #eef2ff;
+    }
+
+    .spinner {
+      width: 58px;
+      height: 58px;
+      border: 5px solid #e2e8f0;
+      border-top: 5px solid #0ea5e9;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #1e293b;
+      letter-spacing: -0.2px;
+    }
+
+    .loading-sub {
+      font-size: 0.85rem;
+      color: #5b6e8c;
+      margin-top: 8px;
+    }
+
+    /* flight results container */
+    .flights-container {
+      margin-top: 24px;
+      animation: fadeInUp 0.4s ease;
+    }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .results-header-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    
+    .results-count {
+      font-weight: 600;
+      color: #1e293b;
+      background: #eef2ff;
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+    }
+    
+    .sort-select {
+      border: 1px solid #e2e8f0;
+      border-radius: 40px;
+      padding: 8px 16px;
+      background: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      color: #1e293b;
+      cursor: pointer;
+    }
+    
+    /* flight card */
+    .flight-card {
+      background: white;
+      border-radius: 28px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      border: 1px solid #eef2ff;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    
+    .flight-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(5,56,129,0.08);
+      border-color: #cbdff2;
+    }
+    
+    .flight-info {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 28px;
+      flex: 2;
+    }
+    
+    .airline-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 140px;
+    }
+    
+    .airline-icon {
+      width: 44px;
+      height: 44px;
+      background: #f1f5f9;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+    }
+    
+    .airline-name {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+    
+    .flight-num {
+      font-size: 0.7rem;
+      color: #5b6e8c;
+    }
+    
+    .flight-times {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .time-dep, .time-arr {
+      text-align: center;
+    }
+    
+    .time-dep .time, .time-arr .time {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    
+    .time-dep .city-code, .time-arr .city-code {
+      font-size: 0.7rem;
+      color: #5b6e8c;
+    }
+    
+    .flight-duration {
+      text-align: center;
+      background: #f8fafc;
+      padding: 6px 14px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #2c3e66;
+    }
+    
+    .flight-price {
+      text-align: right;
+      min-width: 130px;
+    }
+    
+    .price-amount {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #0f172a;
+      font-family: 'Playfair Display', serif;
+    }
+    
+    .price-note {
+      font-size: 0.7rem;
+      color: #5b6e8c;
+    }
+    
+    .select-flight-btn {
+      background: #053881;
+      border: none;
+      padding: 10px 28px;
+      border-radius: 50px;
+      color: white;
+      font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .select-flight-btn:hover {
+      background: #0c4a9e;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(5,56,129,0.3);
+    }
+    
+    /* round trip toggle badge */
+    .trip-badge {
+      background: #e6f7ff;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #0369a1;
+      display: inline-block;
+    }
+    
+    .return-flight-section {
+      margin-top: 32px;
+      border-top: 2px dashed #e2e8f0;
+      padding-top: 28px;
+    }
+    
+    .return-title {
+      font-weight: 700;
+      margin-bottom: 18px;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.1rem;
+    }
+    
+    @media (max-width: 740px) {
+      .flight-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      .flight-price {
+        text-align: left;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .select-flight-btn {
+        width: 100%;
+        margin-top: 8px;
+      }
+    }
+
+    /* city showcase */
+    .cities-showcase {
+      margin-top: 48px;
+      background: white;
+      border-radius: 28px;
+      padding: 28px 24px;
+      border: 1px solid #eef2ff;
+    }
+
+    .cities-showcase h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #0f172a;
+    }
+
+    .city-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .city-chip {
+      background: #f1f5f9;
+      border-radius: 60px;
+      padding: 8px 18px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      border: 1px solid #e2e8f0;
+    }
+
+    .city-chip span:first-child {
+      font-size: 1rem;
+    }
+
+    .city-chip .city-code {
+      font-family: monospace;
+      font-weight: 700;
+      color: #0c4a6e;
+      background: #e6f0ff;
+      padding: 2px 8px;
+      border-radius: 24px;
+      font-size: 0.7rem;
+    }
+    
+    .hidden {
+      display: none;
+    }
+
+    .fade-out {
+      animation: fadeOut 0.25s ease forwards;
+    }
+    
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; display: none; }
+    }
+
+    @media (max-width: 640px) {
+      .result-page {
+        padding: 90px 16px 40px;
+      }
+      .route-summary {
+        padding: 14px 18px;
+      }
+      .city-pair {
+        font-size: 0.95rem;
+        flex-wrap: wrap;
+      }
+    }
+
+     /* ── FOOTER & LEGAL (updated brand) ── */
+  footer {
+    background: var(--navy-dark); color: rgba(255,255,255,.65);
+    padding: 60px 5% 30px;
+  }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+  .footer-brand .nav-logo { font-size: 1.4rem; display: block; margin-bottom: .75rem; white-space: normal; }
+  .footer-brand p { font-size: .88rem; line-height: 1.7; color: rgba(255,255,255,.5); max-width: 280px; }
+  .footer-col h4 { color: var(--white); font-size: .9rem; font-weight: 600; margin-bottom: 1rem; }
+  .footer-col ul { list-style: none; }
+  .footer-col li { margin-bottom: .5rem; }
+  .footer-col a { color: rgba(255,255,255,.5); text-decoration: none; font-size: .85rem; transition: color .2s; }
+  .footer-col a:hover { color: var(--gold); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,.08); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; font-size: .8rem; }
+  
+  .legal-disclosure {
+  background: #053881;
+  padding: 28px 5%;
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.legal-container {
+  max-width: 1250px;
+  margin: 0 auto;
+}
+.legal-disclosure h3 {
+  color: var(--white);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.legal-disclosure .copyright {
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 22px;
+  font-size: 0.8rem;
+}
+.legal-block {
+  color: rgba(255,255,255,0.72);
+  font-size: 0.82rem;
+  line-height: 1.9;
+  margin-bottom: 20px;
+}
+.legal-block span {
+  color: #00c2ff;
+  font-weight: 700;
+}
+.legal-contact {
+  margin-top: 22px;
+  color: rgba(255,255,255,0.8);
+  font-size: 0.85rem;
+}
+.legal-contact a {
+  color: #00c2ff;
+  text-decoration: none;
+  font-weight: 600;
+}
+.legal-contact a:hover {
+  color: var(--gold-light);
+}
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  }
+  @media (max-width: 600px) {
+    .footer-top { grid-template-columns: 1fr; }
+  }
+  .hamburger {
+    display: none; flex-direction: column; justify-content: center; gap: 5px;
+    width: 40px; height: 40px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+    border-radius: 10px; cursor: pointer; padding: 8px;
+  }
+  .hamburger span { display: block; height: 2px; background: var(--white); border-radius: 2px; transition: all .3s ease; }
+  .mobile-menu {
+    position: fixed; top: 0; right: -300px; width: 280px; height: 100vh;
+    background: var(--navy-dark); z-index: 200;
+    display: flex; flex-direction: column; padding: 90px 0 2rem;
+    transition: right .35s cubic-bezier(.4,0,.2,1);
+  }
+  .mobile-menu.open { right: 0; }
+  .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 199; display: none; backdrop-filter: blur(2px); }
+  .menu-overlay.visible { display: block; }
+  </style>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F0YMPGEH83"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-F0YMPGEH83');
+</script>
+
+</head>
+<body>
+  <a href="tel:+18444495490" id="floatingCallBtn" style="position:fixed; bottom:24px; left:50%; transform:translateX(-50%); z-index:9998; display:flex; align-items:center; gap:14px; background:#1a1f3c; border-radius:50px; padding:13px 24px 13px 14px; text-decoration:none; box-shadow:0 4px 24px rgba(0,0,0,0.35); white-space:nowrap;">
+    <span style="width:42px; height:42px; border-radius:50%; background:#3b82f6; display:flex; align-items:center; justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012.18 0h3a2 2 0 012 1.72c.13 1 .36 1.98.71 2.9a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.18 6.18l1.18-1.18a2 2 0 012.11-.45c.92.35 1.9.58 2.9.71A2 2 0 0122 16.92z"/></svg></span>
+    <span style="width:1px; height:28px; background:rgba(255,255,255,0.18);"></span>
+    <span><span style="display:block; font-family:'DM Sans',sans-serif; font-size:17px; font-weight:600; color:#3b82f6;">+1 (844) 449-5490</span><span style="display:block; font-size:12px; color:rgba(255,255,255,0.55);">Book online or call us</span></span>
+  </a>
+
+  <!-- NAVIGATION (UPDATED BRAND) -->
+  <nav>
+    <div class="nav-logo">Book Now <span>Flight</span></div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="disclaimer.html">Disclaimer</a></li>
+      <li><a href="privacy-policy.html">Privacy Policy</a></li>
+      <li><a href="contact.html">Contact Us</a></li>
+    </ul>
+    <button class="nav-cta desktop-only" onclick="window.location.href='tel:+18444495490'">Call +1 (844) 449-5490</button>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  </nav>
+  <div class="mobile-menu" id="mobile-menu">
+    <ul class="mobile-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="disclaimer.html">Disclaimer</a></li>
+      <li><a href="privacy-policy.html">Privacy</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="mobile-cta" onclick="window.location.href='tel:+18444495490'">Call +1 (844) 449-5490</button>
+  </div>
+  <div class="menu-overlay" id="menu-overlay" onclick="closeMenu()"></div>
+
+  <div class="result-page" id="resultPage">
+    <div class="result-header">
+      <button class="back-btn" id="backToSearchBtn">← Modify Search</button>
+      <div class="route-summary"><div class="route-badge" id="routeDetails"></div></div>
+    </div>
+    <div id="loadingState" class="loading-container">
+      <div class="spinner"></div>
+      <div class="loading-text">Searching for the best flights...</div>
+      <div class="loading-sub">Checking availability across 500+ airlines ✈</div>
+    </div>
+    <div id="resultsContent" style="display: none;">
+      <div class="flights-container" id="flightsContainer"></div>
+      <div class="cities-showcase">
+        <h3>📍 Popular destinations you might love</h3>
+        <div class="city-chips" id="cityChipsContainer"></div>
+        <p style="font-size: 0.75rem; color: #5b6e8c; margin-top: 18px;">Explore these vibrant cities for your next adventure</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER (UPDATED BRAND) -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span class="nav-logo">Book Now <span>Flight</span></span>
+        <p>Travel tickets with ease. Search, compare, and book flights worldwide with dedicated 24/7 support. Operated by Book Now Flight.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Flight Search</a></li>
+          <li><a href="#">Cheap Flights</a></li>
+          <li><a href="#">International Flights</a></li>
+          <li><a href="#">Domestic Flights</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Manage Booking</a></li>
+          <li><a href="#">Refund Policy</a></li>
+          <li><a href="privacy-policy.html">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Book Now Flight. All rights reserved.</span>
+      <span>✈ Travel Tickets With Ease</span>
+    </div>
+  </footer>
+  
+  <!-- LEGAL DISCLOSURE (UPDATED BRAND) -->
+  <section class="legal-disclosure">
+    <div class="legal-container">
+      <h3>This site is Managed by Book Now Flight LLC</h3>
+      <p class="copyright">Copyright © 2026 All Rights Reserved</p>
+      <div class="legal-block">
+        <span>Affiliate Disclosure:</span>
+        Our website participates in various affiliate and partner programs, which means we may earn commissions when users book flights or services through our links. Book Now Flight is an independent travel platform and is not directly affiliated with or endorsed by any airline, hotel, or travel brand mentioned on this website. All trademarks, logos, and brand names belong to their respective owners and are used for informational purposes only.
+      </div>
+      <div class="legal-block">
+        <span>Call Consent:</span>
+        By calling the support numbers listed on this website, you consent to receive assistance and information related to travel bookings, modifications, cancellations, and promotional offers. Calls may be monitored or recorded for quality and training purposes. Standard carrier charges may apply depending on your telecom provider.
+      </div>
+      <div class="legal-block">
+        <span>Travel Services Disclaimer:</span>
+        Book Now Flight acts as an independent travel assistance provider. We help customers compare travel options and connect with airlines or service providers when required. Additional airline policies, fare rules, cancellation fees, and service charges may apply depending on the booking.
+      </div>
+      <div class="legal-contact">
+        Customer Support:
+        <a href="tel:+18444495490">+1 (844) 449-5490</a>
+        |
+        Email:
+        <a href="mailto:contact@booknowflight.com">contact@booknowflight.com</a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function toggleMenu() { const menu = document.getElementById('mobile-menu'); const overlay = document.getElementById('menu-overlay'); const btn = document.getElementById('hamburger'); const isOpen = menu.classList.toggle('open'); overlay.classList.toggle('visible', isOpen); btn.classList.toggle('open', isOpen); document.body.style.overflow = isOpen ? 'hidden' : ''; }
+    function closeMenu() { document.getElementById('mobile-menu')?.classList.remove('open'); document.getElementById('menu-overlay')?.classList.remove('visible'); document.getElementById('hamburger')?.classList.remove('open'); document.body.style.overflow = ''; }
+    
+    const AIRPORTS_DB = [
+      { city: "New Delhi", code: "DEL", flag: "🇮🇳" }, { city: "Mumbai", code: "BOM", flag: "🇮🇳" }, { city: "Bangalore", code: "BLR", flag: "🇮🇳" },
+      { city: "Chennai", code: "MAA", flag: "🇮🇳" }, { city: "Dubai", code: "DXB", flag: "🇦🇪" }, { city: "Abu Dhabi", code: "AUH", flag: "🇦🇪" },
+      { city: "Doha", code: "DOH", flag: "🇶🇦" }, { city: "Singapore", code: "SIN", flag: "🇸🇬" }, { city: "Bangkok", code: "BKK", flag: "🇹🇭" },
+      { city: "London", code: "LHR", flag: "🇬🇧" }, { city: "Paris", code: "CDG", flag: "🇫🇷" }, { city: "New York", code: "JFK", flag: "🇺🇸" },
+      { city: "Los Angeles", code: "LAX", flag: "🇺🇸" }, { city: "Sydney", code: "SYD", flag: "🇦🇺" }, { city: "Tokyo", code: "NRT", flag: "🇯🇵" },
+      { city: "Istanbul", code: "IST", flag: "🇹🇷" }
+    ];
+    
+    function parseCityFromInput(inputValue) {
+      if (!inputValue) return null;
+      const match = inputValue.match(/([A-Za-z\s]+)\(([A-Z]{3})\)/);
+      if (match) {
+        const cityName = match[1].trim(), code = match[2];
+        const found = AIRPORTS_DB.find(a => a.code === code);
+        if (found) return found;
+        return { city: cityName, code: code, flag: "🌍" };
+      }
+      const direct = AIRPORTS_DB.find(a => a.city.toLowerCase() === inputValue.toLowerCase());
+      if (direct) return direct;
+      return { city: inputValue, code: inputValue.substring(0,3).toUpperCase(), flag: "✈" };
+    }
+    
+    let searchParams = {
+      from: { city: "New Delhi", code: "DEL", full: "New Delhi (DEL)" },
+      to: { city: "Dubai", code: "DXB", full: "Dubai (DXB)" },
+      departDate: "2026-06-15",
+      returnDate: null,
+      passengers: "1 Adult",
+      tripType: "Round Trip"
+    };
+    
+    function loadSearchContext() {
+      try {
+        const stored = sessionStorage.getItem('skyway_search_context'); // kept for compatibility with homepage
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed.fromVal) {
+            const fromObj = parseCityFromInput(parsed.fromVal);
+            const toObj = parseCityFromInput(parsed.toVal);
+            searchParams.from = { city: fromObj.city, code: fromObj.code, full: parsed.fromVal, flag: fromObj.flag };
+            searchParams.to = { city: toObj.city, code: toObj.code, full: parsed.toVal, flag: toObj.flag };
+            searchParams.departDate = parsed.departDate || "2026-06-15";
+            searchParams.returnDate = parsed.returnDate || null;
+            searchParams.passengers = parsed.passengers || "1 Adult";
+            searchParams.tripType = parsed.tripType || "Round Trip";
+          }
+        } else {
+          const urlParams = new URLSearchParams(window.location.search);
+          if(urlParams.has('from') && urlParams.has('to')) {
+            const fromRaw = urlParams.get('from'), toRaw = urlParams.get('to');
+            const fromObj = parseCityFromInput(fromRaw), toObj = parseCityFromInput(toRaw);
+            searchParams.from = { city: fromObj.city, code: fromObj.code, full: fromRaw, flag: fromObj.flag };
+            searchParams.to = { city: toObj.city, code: toObj.code, full: toRaw, flag: toObj.flag };
+            searchParams.departDate = urlParams.get('depart') || "2026-06-15";
+            searchParams.returnDate = urlParams.get('return') || null;
+            searchParams.tripType = urlParams.get('trip') || "Round Trip";
+          }
+        }
+      } catch(e) { console.warn(e); }
+      const routeDiv = document.getElementById('routeDetails');
+      const departFormatted = searchParams.departDate ? new Date(searchParams.departDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : "Jun 15, 2026";
+      const returnFormatted = searchParams.returnDate ? new Date(searchParams.returnDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : null;
+      routeDiv.innerHTML = `
+        <div class="city-pair">
+          <span>${searchParams.from.city} (${searchParams.from.code})</span>
+          <span class="arrow-icon">→</span>
+          <span>${searchParams.to.city} (${searchParams.to.code})</span>
+          <span class="date-info">${departFormatted}${returnFormatted ? ` - ${returnFormatted}` : ''}</span>
+        </div>
+        <div style="display: flex; gap: 16px; margin-top: 8px; font-size: 0.8rem; color:#475569;">
+          <span>${searchParams.tripType}</span><span>•</span><span>${searchParams.passengers}</span><span>•</span><span>Economy</span>
+        </div>
+      `;
+    }
+    
+    // generate dummy flight offers with updated airline name for consistency
+    function generateDummyFlights(fromCode, toCode, fromCity, toCity, tripType, dateStr) {
+      const airlines = [
+        { name: "Emirates", icon: "✈️", basePrice: 420, flightNum: "EK 506" },
+        { name: "Qatar Airways", icon: "🛩️", basePrice: 398, flightNum: "QR 895" },
+        { name: "Book Now Air", icon: "🌟", basePrice: 349, flightNum: "BN 228" },
+        { name: "British Airways", icon: "🇬🇧", basePrice: 510, flightNum: "BA 145" },
+        { name: "Lufthansa", icon: "🇩🇪", basePrice: 479, flightNum: "LH 762" }
+      ];
+      const times = [
+        { dep: "06:20", arr: "09:45", duration: "3h 25m" },
+        { dep: "12:15", arr: "15:30", duration: "3h 15m" },
+        { dep: "16:45", arr: "20:00", duration: "3h 15m" },
+        { dep: "21:10", arr: "00:25+1", duration: "3h 15m" }
+      ];
+      return airlines.map((air, idx) => {
+        const timeSlot = times[idx % times.length];
+        const priceVar = air.basePrice + (idx * 12);
+        return {
+          id: idx,
+          airline: air.name,
+          icon: air.icon,
+          flightNum: air.flightNum,
+          depTime: timeSlot.dep,
+          arrTime: timeSlot.arr,
+          duration: timeSlot.duration,
+          price: priceVar,
+          fromCode, toCode, fromCity, toCity,
+          date: dateStr
+        };
+      }).slice(0, 4);
+    }
+    
+    function renderFlights() {
+      const container = document.getElementById('flightsContainer');
+      if (!container) return;
+      const outboundFlights = generateDummyFlights(searchParams.from.code, searchParams.to.code, searchParams.from.city, searchParams.to.city, searchParams.tripType, searchParams.departDate);
+      const isRoundTrip = searchParams.tripType?.toLowerCase().includes('round');
+      let returnFlights = [];
+      if (isRoundTrip && searchParams.returnDate) {
+        returnFlights = generateDummyFlights(searchParams.to.code, searchParams.from.code, searchParams.to.city, searchParams.from.city, "Return", searchParams.returnDate);
+      }
+      
+      let html = `<div class="results-header-stats"><div class="results-count">✈️ ${outboundFlights.length} flights found</div><select class="sort-select" id="sortSelect"><option value="price">Sort by: Price (Low to High)</option><option value="departure">Sort by: Departure time</option></select></div>`;
+      html += `<div id="outboundList">`;
+      outboundFlights.forEach(flight => {
+        html += buildFlightCard(flight, 'outbound');
+      });
+      html += `</div>`;
+      if (isRoundTrip && returnFlights.length) {
+        html += `<div class="return-flight-section"><div class="return-title">🔄 Return Flights · ${searchParams.returnDate ? new Date(searchParams.returnDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : ''}</div><div id="returnList">`;
+        returnFlights.forEach(flight => {
+          html += buildFlightCard(flight, 'return');
+        });
+        html += `</div></div>`;
+      }
+      container.innerHTML = html;
+      
+      // sorting logic
+      document.getElementById('sortSelect')?.addEventListener('change', (e) => {
+        const sortBy = e.target.value;
+        const sortedOut = [...outboundFlights];
+        if (sortBy === 'price') sortedOut.sort((a,b) => a.price - b.price);
+        else if (sortBy === 'departure') sortedOut.sort((a,b) => a.depTime.localeCompare(b.depTime));
+        document.getElementById('outboundList').innerHTML = sortedOut.map(f => buildFlightCard(f, 'outbound')).join('');
+        if (isRoundTrip && returnFlights.length) {
+          let sortedRet = [...returnFlights];
+          if (sortBy === 'price') sortedRet.sort((a,b) => a.price - b.price);
+          else if (sortBy === 'departure') sortedRet.sort((a,b) => a.depTime.localeCompare(b.depTime));
+          document.getElementById('returnList').innerHTML = sortedRet.map(f => buildFlightCard(f, 'return')).join('');
+        }
+      });
+    }
+    
+    function buildFlightCard(flight, type) {
+      return `
+        <div class="flight-card" data-flight-id="${flight.id}">
+          <div class="flight-info">
+            <div class="airline-badge">
+              <div class="airline-icon">${flight.icon}</div>
+              <div><div class="airline-name">${flight.airline}</div><div class="flight-num">${flight.flightNum}</div></div>
+            </div>
+            <div class="flight-times">
+              <div class="time-dep"><div class="time">${flight.depTime}</div><div class="city-code">${flight.fromCode}</div></div>
+              <span class="arrow-icon">→</span>
+              <div class="time-arr"><div class="time">${flight.arrTime}</div><div class="city-code">${flight.toCode}</div></div>
+              <div class="flight-duration">⏱️ ${flight.duration}</div>
+            </div>
+          </div>
+          <div class="flight-price">
+            <div class="price-amount">$${flight.price}</div>
+            <div class="price-note">per adult · round trip</div>
+          </div>
+          <button class="select-flight-btn" onclick="alert('✈️ Flight ${flight.flightNum} selected! Proceed to booking (dummy).')">Select</button>
+        </div>
+      `;
+    }
+    
+    function buildCityChips() {
+      const container = document.getElementById('cityChipsContainer');
+      if (!container) return;
+      const fromCity = searchParams.from.city, toCity = searchParams.to.city;
+      let suggestCities = AIRPORTS_DB.filter(a => a.city.toLowerCase() !== fromCity.toLowerCase() && a.city.toLowerCase() !== toCity.toLowerCase());
+      const shuffled = [...suggestCities];
+      for (let i = shuffled.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; }
+      const selected = shuffled.slice(0, 8);
+      container.innerHTML = selected.map(cityObj => `<div class="city-chip"><span>${cityObj.flag || "🌍"}</span><span>${cityObj.city}</span><span class="city-code">${cityObj.code}</span></div>`).join('');
+    }
+    
+    function simulateFlightSearch() {
+      const loadingEl = document.getElementById('loadingState');
+      const resultsContainer = document.getElementById('resultsContent');
+      buildCityChips();
+      setTimeout(() => {
+        if (loadingEl) {
+          loadingEl.style.transition = 'opacity 0.25s ease';
+          loadingEl.style.opacity = '0';
+          setTimeout(() => {
+            loadingEl.style.display = 'none';
+            if (resultsContainer) {
+              resultsContainer.style.display = 'block';
+              renderFlights();
+            }
+          }, 250);
+        } else { if (resultsContainer) { resultsContainer.style.display = 'block'; renderFlights(); } }
+      }, 1500);
+    }
+    
+    function goBackToSearch() { window.location.href = 'index.html'; }
+    function resetAndGoHome() { sessionStorage.removeItem('skyway_search_context'); window.location.href = 'index.html'; }
+    
+    window.addEventListener('DOMContentLoaded', () => {
+      loadSearchContext();
+      simulateFlightSearch();
+      document.getElementById('backToSearchBtn')?.addEventListener('click', goBackToSearch);
+      document.getElementById('newSearchBtn')?.addEventListener('click', resetAndGoHome);
+      const newBtn = document.getElementById('newSearchBtn');
+      if(newBtn) newBtn.removeEventListener('click', resetAndGoHome);
+      const newSearchBtnFallback = document.getElementById('newSearchBtn');
+      if(newSearchBtnFallback) newSearchBtnFallback.addEventListener('click', resetAndGoHome);
+    });
+  </script>
+</body>
+</html>

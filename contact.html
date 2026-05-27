@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SkyWay | Contact Us - 24/7 Travel Support</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #053881;
+    --navy-dark: #021f4a;
+    --sky: #0ea5e9;
+    --gold: #f59e0b;
+    --gold-light: #fcd34d;
+    --white: #ffffff;
+    --off-white: #f8fafc;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; color: var(--text); background: var(--off-white); overflow-x: hidden; }
+
+  /* ── NAV (identical to homepage) ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%; height: 70px;
+    background: rgba(5,56,129,0.95);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+    animation: slideDown .6s ease;
+  }
+  @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; font-weight: 900;
+    color: var(--white);
+    letter-spacing: -0.5px;
+  }
+  .nav-logo span { color: var(--gold); }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: rgba(255,255,255,0.85); text-decoration: none; font-size: .9rem; font-weight: 500; transition: color .2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+
+  .nav-cta {
+    background: var(--gold); color: var(--navy-dark);
+    border: none; padding: .55rem 1.4rem; border-radius: 50px;
+    font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: .9rem;
+    cursor: pointer; transition: all .2s;
+  }
+  .nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); box-shadow: 0 4px 15px rgba(245,158,11,.4); }
+
+  /* ── HAMBURGER & MOBILE MENU ── */
+  .hamburger {
+    display: none; flex-direction: column; justify-content: center; gap: 5px;
+    width: 40px; height: 40px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+    border-radius: 10px; cursor: pointer; padding: 8px;
+    transition: background .2s;
+  }
+  .hamburger:hover { background: rgba(255,255,255,.18); }
+  .hamburger span {
+    display: block; height: 2px; background: var(--white); border-radius: 2px;
+    transition: all .3s ease; transform-origin: center;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .menu-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45);
+    z-index: 199; backdrop-filter: blur(2px);
+  }
+  .menu-overlay.visible { display: block; }
+
+  .mobile-menu {
+    position: fixed; top: 0; right: -300px; width: 280px; height: 100vh;
+    background: var(--navy-dark); z-index: 200;
+    display: flex; flex-direction: column;
+    padding: 90px 0 2rem;
+    transition: right .35s cubic-bezier(.4,0,.2,1);
+    box-shadow: -8px 0 40px rgba(0,0,0,.3);
+  }
+  .mobile-menu.open { right: 0; }
+
+  .mobile-links { list-style: none; flex: 1; }
+  .mobile-links li { border-bottom: 1px solid rgba(255,255,255,.06); }
+  .mobile-links a {
+    display: block; padding: 1rem 1.8rem;
+    color: rgba(255,255,255,.85); text-decoration: none;
+    font-size: 1rem; font-weight: 500; letter-spacing: .01em;
+    transition: all .2s;
+  }
+  .mobile-links a:hover { color: var(--gold); background: rgba(255,255,255,.05); padding-left: 2.2rem; }
+
+  .mobile-cta {
+    margin: 1.5rem 1.8rem 0;
+    background: var(--gold); color: var(--navy-dark);
+    border: none; padding: .85rem; border-radius: 50px;
+    font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 1rem;
+    cursor: pointer; transition: all .2s;
+  }
+  .mobile-cta:hover { background: var(--gold-light); }
+
+  /* ── PAGE HEADER (contact) ── */
+  .page-header {
+    padding: 140px 5% 70px;
+    background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 50%, #0c4a9e 100%);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-header::before {
+    content: ''; position: absolute;
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(14,165,233,.15) 0%, transparent 70%);
+    top: -200px; right: -150px;
+    animation: float 12s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20px) scale(1.03); } }
+  .page-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900; color: var(--white); margin-bottom: 1rem;
+    position: relative; z-index: 2;
+  }
+  .page-header p {
+    color: rgba(255,255,255,.8); font-size: 1.1rem; max-width: 700px; margin: 0 auto;
+    position: relative; z-index: 2;
+  }
+
+  /* ── MAIN CONTACT CONTENT ── */
+  .contact-main {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 70px 5%;
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+  }
+
+  /* contact info cards */
+  .contact-info {
+    background: white;
+    border-radius: 28px;
+    padding: 40px;
+    border: 1px solid var(--border);
+  }
+
+  .contact-info h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--navy);
+    margin-bottom: 0.5rem;
+  }
+
+  .contact-info > p {
+    color: var(--muted);
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+  }
+
+  .info-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: 30px;
+    padding: 15px 0;
+    border-bottom: 1px solid #eef2ff;
+  }
+  .info-card:last-child {
+    border-bottom: none;
+  }
+  .info-icon {
+    width: 54px;
+    height: 54px;
+    background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    flex-shrink: 0;
+  }
+  .info-details h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: var(--text);
+  }
+  .info-details p, .info-details a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  .info-details a:hover {
+    color: var(--navy);
+  }
+
+  .hours-badge {
+    background: #f1f5f9;
+    border-radius: 50px;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #10b981;
+    display: inline-block;
+    margin-top: 8px;
+  }
+
+  /* contact form */
+  .contact-form {
+    background: white;
+    border-radius: 28px;
+    padding: 40px;
+    border: 1px solid var(--border);
+  }
+  .contact-form h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--navy);
+    margin-bottom: 0.5rem;
+  }
+  .contact-form > p {
+    color: var(--muted);
+    margin-bottom: 1.8rem;
+    font-size: 0.95rem;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+  .form-group label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+    background: white;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    outline: none;
+    border-color: var(--sky);
+    box-shadow: 0 0 0 3px rgba(14,165,233,0.1);
+  }
+  .form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+  .submit-btn {
+    background: var(--navy);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+  }
+  .submit-btn:hover {
+    background: var(--sky);
+    transform: translateY(-1px);
+  }
+
+  .disclaimer-small {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  /* support section */
+  .support-section {
+    margin-top: 70px;
+    background: linear-gradient(135deg, #f8fafc, #ffffff);
+    border-radius: 28px;
+    padding: 50px 40px;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+  .support-section h3 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 15px;
+  }
+  .support-section p {
+    color: var(--muted);
+    max-width: 600px;
+    margin: 0 auto 25px;
+  }
+  .support-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .support-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 28px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .support-btn.phone {
+    background: var(--gold);
+    color: var(--navy-dark);
+  }
+  .support-btn.phone:hover {
+    background: var(--gold-light);
+    transform: translateY(-2px);
+  }
+  .support-btn.email {
+    background: var(--navy);
+    color: white;
+  }
+  .support-btn.email:hover {
+    background: var(--sky);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 900px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+      gap: 35px;
+    }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .nav-links { display: none; }
+    .desktop-only { display: none; }
+    .hamburger { display: flex; }
+    .contact-info, .contact-form {
+      padding: 30px 25px;
+    }
+  }
+  @media (max-width: 600px) {
+    .support-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+    .support-btn {
+      width: 100%;
+      justify-content: center;
+    }
+    .page-header { padding: 120px 5% 60px; }
+    .footer-top { grid-template-columns: 1fr; }
+  }
+
+  /* ── FOOTER (identical to homepage) ── */
+  footer {
+    background: var(--navy-dark); color: rgba(255,255,255,.65);
+    padding: 60px 5% 30px;
+  }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+  .footer-brand .nav-logo { font-size: 1.4rem; display: block; margin-bottom: .75rem; }
+  .footer-brand p { font-size: .88rem; line-height: 1.7; color: rgba(255,255,255,.5); max-width: 280px; }
+  .footer-col h4 { color: var(--white); font-size: .9rem; font-weight: 600; margin-bottom: 1rem; }
+  .footer-col ul { list-style: none; }
+  .footer-col li { margin-bottom: .5rem; }
+  .footer-col a { color: rgba(255,255,255,.5); text-decoration: none; font-size: .85rem; transition: color .2s; }
+  .footer-col a:hover { color: var(--gold); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,.08); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; font-size: .8rem; flex-wrap: wrap; gap: 12px; }
+
+  /* legal disclosure (same as home) */
+  .legal-disclosure {
+    background: #053881;
+    padding: 28px 5%;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .legal-container {
+    max-width: 1250px;
+    margin: 0 auto;
+  }
+  .legal-disclosure h3 {
+    color: var(--white);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .legal-disclosure .copyright {
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 22px;
+    font-size: 0.8rem;
+  }
+  .legal-block {
+    color: rgba(255,255,255,0.72);
+    font-size: 0.82rem;
+    line-height: 1.9;
+    margin-bottom: 20px;
+  }
+  .legal-block span {
+    color: #00c2ff;
+    font-weight: 700;
+  }
+  .legal-contact {
+    margin-top: 22px;
+    color: rgba(255,255,255,0.8);
+    font-size: 0.85rem;
+  }
+  .legal-contact a {
+    color: #00c2ff;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .legal-contact a:hover {
+    color: var(--gold-light);
+  }
+</style>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F0YMPGEH83"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-F0YMPGEH83');
+</script>
+
+</head>
+<body>
+
+  <!-- FLOATING CALL BUTTON -->
+<a href="tel:+18444495490" id="floatingCallBtn" style="
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #1a1f3c;
+  border-radius: 50px;
+  padding: 13px 24px 13px 14px;
+  text-decoration: none;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+  white-space: nowrap;
+">
+  <span style="
+    width: 42px; height: 42px; border-radius: 50%;
+    background: #3b82f6;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  ">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012.18 0h3a2 2 0 012 1.72c.13 1 .36 1.98.71 2.9a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.18 6.18l1.18-1.18a2 2 0 012.11-.45c.92.35 1.9.58 2.9.71A2 2 0 0122 16.92z"/>
+    </svg>
+  </span>
+  <span style="width: 1px; height: 28px; background: rgba(255,255,255,0.18); flex-shrink:0;"></span>
+  <span>
+    <span style="display:block; font-family:'DM Sans',sans-serif; font-size:17px; font-weight:600; color:#3b82f6; letter-spacing:0.01em;">+1 (844) 449-5490</span>
+    <span style="display:block; font-family:'DM Sans',sans-serif; font-size:12px; color:rgba(255,255,255,0.55); margin-top:1px;">Book online or call us</span>
+  </span>
+</a>
+
+<script>
+  (function() {
+    var btn = document.getElementById('floatingCallBtn');
+    btn.addEventListener('mouseenter', function() {
+      btn.style.transform = 'translateX(-50%) translateY(-2px)';
+      btn.style.boxShadow = '0 8px 32px rgba(0,0,0,0.4)';
+    });
+    btn.addEventListener('mouseleave', function() {
+      btn.style.transform = 'translateX(-50%) translateY(0)';
+      btn.style.boxShadow = '0 4px 24px rgba(0,0,0,0.35)';
+    });
+  })();
+</script>
+
+<!-- NAV (same as homepage) -->
+<nav>
+  <div class="nav-logo">Sky<span>Way</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="disclaimer.html">Disclaimer</a></li>
+    <li><a href="privacy-policy.html">Privacy Policy</a></li>
+    <li><a href="contact.html" class="active">Contact Us</a></li>
+  </ul>
+  <button class="nav-cta desktop-only" onclick="window.location.href='tel:+18444495490'">Call +1 (844) 449-5490</button>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <ul class="mobile-links">
+    <li><a href="index.html" onclick="closeMenu()">Home</a></li>
+    <li><a href="about.html" onclick="closeMenu()">About us</a></li>
+    <li><a href="disclaimer.html" onclick="closeMenu()">Disclaimer</a></li>
+    <li><a href="privacy-policy.html" onclick="closeMenu()">Privacy Policy</a></li>
+    <li><a href="contact.html" onclick="closeMenu()">Contact Us</a></li>
+  </ul>
+  <button class="mobile-cta" onclick="window.location.href='tel:+18444495490'">Call +1 (844) 449-5490</button>
+</div>
+<div class="menu-overlay" id="menu-overlay" onclick="closeMenu()"></div>
+
+<!-- PAGE HEADER -->
+<section class="page-header">
+  <h1>Contact Us</h1>
+  <p>We're here to help 24/7. Reach out to our travel specialists for any assistance.</p>
+</section>
+
+<!-- MAIN CONTACT CONTENT -->
+<div class="contact-main">
+  <div class="contact-grid">
+    
+    <!-- LEFT: Contact Information -->
+    <div class="contact-info">
+      <h2>Get in Touch</h2>
+      <p>Our dedicated support team is available around the clock to assist with flight bookings, changes, cancellations, and any travel questions.</p>
+      
+      <div class="info-card">
+        <div class="info-icon">📞</div>
+        <div class="info-details">
+          <h3>Phone Support</h3>
+          <a href="tel:+18444495490"><strong>+1 (844) 449-5490</strong></a>
+          <p>Toll-free · Available 24/7</p>
+          <span class="hours-badge">⭐ Priority assistance for urgent changes</span>
+        </div>
+      </div>
+      
+      <div class="info-card">
+        <div class="info-icon">✉️</div>
+        <div class="info-details">
+          <h3>Email Us</h3>
+          <a href="mailto:contact@skywaytravels.com">contact@skywaytravels.com</a>
+          <p>Response within 24 hours</p>
+        </div>
+      </div>
+      
+      <div class="info-card">
+        <div class="info-icon">📍</div>
+        <div class="info-details">
+          <h3>Headquarters</h3>
+          <p>SkyWay Group LLC<br />123 Travelers Way, Suite 400<br />Wilmington, DE 19801<br />United States</p>
+        </div>
+      </div>
+      
+      <div class="info-card">
+        <div class="info-icon">⏰</div>
+        <div class="info-details">
+          <h3>Business Hours</h3>
+          <p>Customer Support: 24/7 (365 days a year)<br />Corporate Office: Mon-Fri, 9AM - 6PM EST</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- RIGHT: Contact Form -->
+    <div class="contact-form">
+      <h2>Send a Message</h2>
+      <p>Fill out the form below and we'll get back to you as soon as possible.</p>
+      
+      <form id="contactForm" onsubmit="handleContactSubmit(event)">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" id="fullName" required placeholder="John Doe">
+        </div>
+        
+        <div class="form-group">
+          <label>Email Address *</label>
+          <input type="email" id="email" required placeholder="john@example.com">
+        </div>
+        
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="phone" placeholder="+1 (XXX) XXX-XXXX">
+        </div>
+        
+        <div class="form-group">
+          <label>Inquiry Type *</label>
+          <select id="inquiryType" required>
+            <option value="">Select an option</option>
+            <option value="booking">Booking Assistance</option>
+            <option value="change">Flight Change / Cancellation</option>
+            <option value="refund">Refund Request</option>
+            <option value="complaint">Complaint</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Message *</label>
+          <textarea id="message" required placeholder="Please provide details about your inquiry..."></textarea>
+        </div>
+        
+        <button type="submit" class="submit-btn">Send Message ✈</button>
+        <div class="disclaimer-small">By submitting, you agree to our privacy policy. We'll respond within 24 hours.</div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Support Section -->
+  <div class="support-section">
+    <h3>Need Immediate Assistance?</h3>
+    <p>For urgent flight changes, cancellations, or last-minute bookings, call our travel specialists directly.</p>
+    <div class="support-buttons">
+      <a href="tel:+18444495490" class="support-btn phone">📞 Call +1 (844) 449-5490</a>
+      <a href="mailto:contact@skywaytravels.com" class="support-btn email">✉️ Email Support</a>
+    </div>
+    <p style="font-size: 0.75rem; margin-top: 20px;">Available 24/7 · Toll-free · Service fees may apply</p>
+  </div>
+</div>
+
+<!-- FOOTER (exact match with home) -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="nav-logo">Sky<span>Way</span></span>
+      <p>Travel tickets with ease. Search, compare, and book flights worldwide with dedicated 24/7 support. Operated by SkyWay Group.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Flight Search</a></li>
+        <li><a href="#">Cheap Flights</a></li>
+        <li><a href="#">International Flights</a></li>
+        <li><a href="#">Domestic Flights</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#">Help Center</a></li>
+        <li><a href="#">Manage Booking</a></li>
+        <li><a href="#">Refund Policy</a></li>
+        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 SkyWay Group. All rights reserved.</span>
+    <span>✈ Travel Tickets With Ease</span>
+  </div>
+</footer>
+
+<!-- LEGAL DISCLOSURE (identical to homepage) -->
+<section class="legal-disclosure">
+  <div class="legal-container">
+    <h3>This site is Managed by SkyWay Group LLC</h3>
+    <p class="copyright">Copyright © 2026 All Rights Reserved</p>
+    <div class="legal-block">
+      <span>Affiliate Disclosure:</span>
+      Our website participates in various affiliate and partner programs, which means we may earn commissions when users book flights or services through our links. SkyWay is an independent travel platform and is not directly affiliated with or endorsed by any airline, hotel, or travel brand mentioned on this website. All trademarks, logos, and brand names belong to their respective owners and are used for informational purposes only.
+    </div>
+    <div class="legal-block">
+      <span>Call Consent:</span>
+      By calling the support numbers listed on this website, you consent to receive assistance and information related to travel bookings, modifications, cancellations, and promotional offers. Calls may be monitored or recorded for quality and training purposes. Standard carrier charges may apply depending on your telecom provider.
+    </div>
+    <div class="legal-block">
+      <span>Travel Services Disclaimer:</span>
+      SkyWay acts as an independent travel assistance provider. We help customers compare travel options and connect with airlines or service providers when required. Additional airline policies, fare rules, cancellation fees, and service charges may apply depending on the booking.
+    </div>
+    <div class="legal-contact">
+      Customer Support:
+      <a href="tel:+18444495490">+1 (844) 449-5490</a>
+      |
+      Email:
+      <a href="mailto:contact@skywaytravels.com">contact@skywaytravels.com</a>
+    </div>
+  </div>
+</section>
+
+<script>
+  // ── HAMBURGER MENU ──
+  function toggleMenu() {
+    const menu = document.getElementById('mobile-menu');
+    const overlay = document.getElementById('menu-overlay');
+    const btn = document.getElementById('hamburger');
+    const isOpen = menu.classList.toggle('open');
+    overlay.classList.toggle('visible', isOpen);
+    btn.classList.toggle('open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  }
+
+  function closeMenu() {
+    document.getElementById('mobile-menu').classList.remove('open');
+    document.getElementById('menu-overlay').classList.remove('visible');
+    document.getElementById('hamburger').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ── CONTACT FORM HANDLER ──
+  function handleContactSubmit(event) {
+    event.preventDefault();
+    
+    const name = document.getElementById('fullName').value;
+    const email = document.getElementById('email').value;
+    const inquiryType = document.getElementById('inquiryType').value;
+    const message = document.getElementById('message').value;
+    
+    // Simple validation
+    if (!name || !email || !inquiryType || !message) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert('Please enter a valid email address.');
+      return;
+    }
+    
+    // Show success message (in a real implementation, this would send to a backend)
+    alert(`Thank you ${name}! Your message has been received.\n\nA travel specialist will respond to ${email} within 24 hours.\n\nReference: ${inquiryType.toUpperCase()}`);
+    
+    // Reset form
+    document.getElementById('contactForm').reset();
+  }
+</script>
+
+</body>
+</html>
